@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Two-Slit Interference Practice</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background: #f5f5f5; }
+    h1 { color: #333; }
+    .question, .feedback, .part { margin-top: 20px; }
+    input, button { margin-top: 10px; padding: 5px; font-size: 1em; }
+    .part-title { font-weight: bold; margin-top: 30px; }
+  </style>
+</head>
+<body>
+  <h1>Two-Slit Interference Practice</h1>
+
+  <div class="question">
+    <p id="question-text">Loading question...</p>
+
+    <div class="part">
+      <p class="part-title" id="question-prompt"></p>
+      <input type="number" id="user-answer" step="any" placeholder="Enter your answer">
+      <button onclick="checkAnswer()">Check answer</button>
+      <button onclick="revealAnswer()">Give up</button>
+      <div class="feedback" id="feedback"></div>
+      <button onclick="newQuestion()">Next Question</button>
+    </div>
+  </div>
+
+  <script>
+    let a, x, d, lambda;
+    let variableToFind, correctAnswer;
+
+    function formatUnit(value, unit) {
+      if (unit === 'mm') return `${(value * 1000).toFixed(3)} mm`;
+      if (unit === 'nm') return `${(value * 1e9).toFixed(1)} nm`;
+      return `${value.toFixed(3)} m`;
+    }
+
+    function newQuestion() {
+      a = (Math.random() * 0.5 + 0.1) / 1000; // slit spacing a: 0.1–0.6 mm in meters
+      x = (Math.random() * 4 + 1) / 1000;     // fringe spacing x: 1–5 mm in meters
+      d = (Math.random() * 0.5 + 0.5);        // screen distance d: 0.5–1.0 m
+
+      lambda = (a * x) / d;
+
+      const variables = ['lambda', 'a', 'x', 'd'];
+      variableToFind = variables[Math.floor(Math.random() * variables.length)];
+
+      let questionText = '';
+      if (variableToFind !== 'a') questionText += `a = ${formatUnit(a, 'mm')}, `;
+      if (variableToFind !== 'x') questionText += `x = ${formatUnit(x, 'mm')}, `;
+      if (variableToFind !== 'd') questionText += `d = ${d.toFixed(2)} m, `;
+      if (variableToFind !== 'lambda') questionText += `λ = ${formatUnit(lambda, 'nm')}`;
+
+      document.getElementById("question-text").innerText = questionText;
+
+      switch (variableToFind) {
+        case 'lambda':
+          correctAnswer = lambda;
+          document.getElementById("question-prompt").innerText = "Calculate the wavelength λ (in meters)";
+          break;
+        case 'a':
+          correctAnswer = a;
+          document.getElementById("question-prompt").innerText = "Calculate the slit spacing a (in meters)";
+          break;
+        case 'x':
+          correctAnswer = x;
+          document.getElementById("question-prompt").innerText = "Calculate the fringe spacing x (in meters)";
+          break;
+        case 'd':
+          correctAnswer = d;
+          document.getElementById("question-prompt").innerText = "Calculate the screen distance d (in meters)";
+          break;
+      }
+
+      document.getElementById("user-answer").value = "";
+      document.getElementById("feedback").innerText = "";
+    }
+
+    function checkAnswer() {
+      const userAnswer = parseFloat(document.getElementById("user-answer").value);
+      if (isNaN(userAnswer)) {
+        document.getElementById("feedback").innerText = "Please enter a number.";
+        return;
+      }
+
+      const margin = correctAnswer * 0.02;
+
+      if (Math.abs(userAnswer - correctAnswer) <= margin) {
+        document.getElementById("feedback").innerText = "Correct! Well done.";
+      } else {
+        document.getElementById("feedback").innerText = "Incorrect. Try again or click 'Give up'.";
+      }
+    }
+
+    function revealAnswer() {
+      let displayUnit = variableToFind === 'lambda' ? 'nm' : (variableToFind === 'd' ? 'm' : 'mm');
+      let displayValue = formatUnit(correctAnswer, displayUnit);
+      document.getElementById("feedback").innerText = `The correct answer is ${displayValue}.`;
+      document.getElementById("user-answer").value = '';
+    }
+
+    newQuestion();
+  </script>
+</body>
+</html>
