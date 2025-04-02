@@ -20,6 +20,7 @@
 <body>
   <h1>Cambridge Physics 9702 Practice Hub</h1>
 
+  <!-- Whole Course Section -->
   <div class="section">
     <h2>Whole Course</h2>
     <label><input type="checkbox" id="whole-defs" onchange="toggleByGroup('defs', this.checked)"> Definitions</label>
@@ -27,6 +28,7 @@
     <button onclick="startPractice()">Start Practice</button>
   </div>
 
+  <!-- By Topic Section -->
   <div class="section">
     <h2>By Topic</h2>
     <div class="topics-grid">
@@ -35,6 +37,7 @@
     </div>
   </div>
 
+  <!-- Another Start Practice Button at Bottom -->
   <div class="section">
     <button onclick="startPractice()">Start Practice</button>
   </div>
@@ -43,6 +46,7 @@
   <div id="question-box"></div>
 
   <script>
+    // Topics array (11 topics)
     const topics = [
       "Physical quantities and units",
       "Kinematics",
@@ -67,11 +71,8 @@
           <label><input type="checkbox" id="topic${topicNum}-defs"> Definitions</label>
           <label><input type="checkbox" id="topic${topicNum}-eqs"> Equations</label>
         `;
-        if (i % 2 === 0) {
-          left.innerHTML += block;
-        } else {
-          right.innerHTML += block;
-        }
+        if (i % 2 === 0) left.innerHTML += block;
+        else right.innerHTML += block;
       });
     }
 
@@ -80,7 +81,62 @@
       all.forEach(box => box.checked = isChecked);
     }
 
+    // Expanded question bank with 50 equation questions
     const questionBank = [
+      // Topic 1: Physical quantities and units (4 questions)
+      {
+        topic: 1,
+        type: "equation",
+        question: function() {
+          const km = 3.2;
+          const m = km * 1000;
+          return {
+            text: `Convert ${km} km to meters.`,
+            answer: m.toFixed(0),
+            model: `Multiply by 1000: ${km} km = ${m} m.`
+          };
+        }
+      },
+      {
+        topic: 1,
+        type: "equation",
+        question: function() {
+          const grams = 5000;
+          const kg = grams / 1000;
+          return {
+            text: `Express ${grams} g in kilograms.`,
+            answer: kg.toFixed(1),
+            model: `Divide by 1000: ${grams} g = ${kg} kg.`
+          };
+        }
+      },
+      {
+        topic: 1,
+        type: "equation",
+        question: function() {
+          const km = 60, hr = 1;
+          const mps = (km * 1000) / (hr * 3600);
+          return {
+            text: `A car travels ${km} km in ${hr} hour. What is its speed in m/s?`,
+            answer: mps.toFixed(2),
+            model: `Speed = (60×1000)/3600 = ${mps.toFixed(2)} m/s.`
+          };
+        }
+      },
+      {
+        topic: 1,
+        type: "equation",
+        question: function() {
+          const mass_g = 2000, volume_cm3 = 500;
+          const density = (mass_g / 1000) / (volume_cm3 / 1e6);
+          return {
+            text: `A substance has a mass of ${mass_g} g and a volume of ${volume_cm3} cm³. Calculate its density in kg/m³.`,
+            answer: density.toFixed(0),
+            model: `Density = (2000/1000) / (500/1e6) = ${density.toFixed(0)} kg/m³.`
+          };
+        }
+      },
+      // Topic 2: Kinematics (6 questions)
       {
         topic: 2,
         type: "equation",
@@ -90,9 +146,9 @@
           const t = Math.floor(Math.random() * 4 + 2);
           const s = u * t + 0.5 * a * t * t;
           return {
-            text: `A body starts with an initial speed of ${u} m/s and accelerates at ${a} m/s² for ${t} seconds. Calculate the displacement.`,
+            text: `A body starts with a speed of ${u} m/s and accelerates at ${a} m/s² for ${t} s. Calculate the displacement.`,
             answer: s.toFixed(1),
-            model: `Use s = ut + 0.5at² = ${u}*${t} + 0.5*${a}*${t}² = ${s.toFixed(1)} m`
+            model: `s = ut + 0.5at² = ${u}×${t} + 0.5×${a}×${t}² = ${s.toFixed(1)} m.`
           };
         }
       },
@@ -111,8 +167,563 @@
           return {
             text: `A ${m} kg block slides down a frictionless slope inclined at ${angle}°. It travels ${d} m. Calculate the speed at the bottom.`,
             answer: v.toFixed(2),
-            model: `a = g·sin(θ) = 9.8·sin(${angle}°) = ${a.toFixed(2)} m/s², then v² = 2ad = ${vSquared.toFixed(2)} ⇒ v = ${v.toFixed(2)} m/s`,
-            image: `https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Free_body_diagram_-_inclined_plane_no_friction.svg/640px-Free_body_diagram_-_inclined_plane_no_friction.svg.png`
+            model: `a = 9.8×sin(${angle}°) = ${a.toFixed(2)} m/s², v² = 2×${a.toFixed(2)}×${d} = ${vSquared.toFixed(2)}, so v = ${v.toFixed(2)} m/s.`,
+            image: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Free_body_diagram_-_inclined_plane_no_friction.svg/640px-Free_body_diagram_-_inclined_plane_no_friction.svg.png"
+          };
+        }
+      },
+      {
+        topic: 2,
+        type: "equation",
+        question: function() {
+          const u = Math.floor(Math.random() * 10 + 10);
+          const angle = Math.floor(Math.random() * 30 + 30);
+          const radians = angle * Math.PI / 180;
+          const g = 9.8;
+          const R = (u * u * Math.sin(2 * radians)) / g;
+          return {
+            text: `A projectile is launched at ${angle}° with an initial speed of ${u} m/s. Calculate its horizontal range.`,
+            answer: R.toFixed(2),
+            model: `Range R = (u² sin(2θ))/g = (${u}² sin(2×${angle}°))/9.8 = ${R.toFixed(2)} m.`
+          };
+        }
+      },
+      {
+        topic: 2,
+        type: "equation",
+        question: function() {
+          const h = Math.floor(Math.random() * 20 + 10);
+          const g = 9.8;
+          const t = Math.sqrt((2 * h) / g);
+          return {
+            text: `An object is launched horizontally from a height of ${h} m. Calculate the time to hit the ground.`,
+            answer: t.toFixed(2),
+            model: `t = √(2h/g) = √(2×${h}/9.8) = ${t.toFixed(2)} s.`
+          };
+        }
+      },
+      {
+        topic: 2,
+        type: "equation",
+        question: function() {
+          const t = Math.floor(Math.random() * 4 + 2);
+          const g = 9.8;
+          const s = 0.5 * g * t * t;
+          return {
+            text: `An object in free-fall for ${t} s falls a distance of:`,
+            answer: s.toFixed(1),
+            model: `s = 0.5×9.8×${t}² = ${s.toFixed(1)} m.`
+          };
+        }
+      },
+      // Additional Projectile Motion (Topic 2) – Question 6
+      {
+        topic: 2,
+        type: "equation",
+        question: function() {
+          const u = Math.floor(Math.random() * 10 + 10);
+          const angle = Math.floor(Math.random() * 30 + 30);
+          const radians = angle * Math.PI / 180;
+          const g = 9.8;
+          const R = (u * u * Math.sin(2 * radians)) / g;
+          return {
+            text: `A projectile is launched at ${angle}° with an initial speed of ${u} m/s. Calculate its range.`,
+            answer: R.toFixed(2),
+            model: `Range = (u² sin(2θ))/g = (${u}² sin(2×${angle}°))/9.8 = ${R.toFixed(2)} m.`
+          };
+        }
+      },
+      // Topic 3: Dynamics (5 questions)
+      {
+        topic: 3,
+        type: "equation",
+        question: function() {
+          const L = Math.floor(Math.random() * 5 + 1);
+          const W = Math.floor(Math.random() * 50 + 20);
+          const theta = Math.floor(Math.random() * 30 + 30);
+          const radians = theta * Math.PI / 180;
+          const T = (W * L / 2) / (L * Math.sin(radians));
+          return {
+            text: `A uniform beam of length ${L} m and weight ${W} N is supported by a string at an angle of ${theta}° with the beam. Calculate the tension in the string.`,
+            answer: T.toFixed(1),
+            model: `T = [W×(L/2)]/(L×sin(${theta}°)) = ${T.toFixed(1)} N.`
+          };
+        }
+      },
+      {
+        topic: 3,
+        type: "equation",
+        question: function() {
+          const m1 = 2, m2 = 3, u1 = 3, u2 = 0;
+          const vf = (m1 * u1 + m2 * u2) / (m1 + m2);
+          return {
+            text: `A ${m1} kg object moving at 3 m/s collides inelastically with a ${m2} kg object at rest. Find the final velocity.`,
+            answer: vf.toFixed(2),
+            model: `vf = (2×3+3×0)/(2+3) = ${vf.toFixed(2)} m/s.`
+          };
+        }
+      },
+      {
+        topic: 3,
+        type: "equation",
+        question: function() {
+          const m = Math.floor(Math.random() * 20 + 5);
+          const a = Math.floor(Math.random() * 5 + 1);
+          const F = m * a;
+          return {
+            text: `An object of mass ${m} kg accelerates at ${a} m/s². Calculate the net force.`,
+            answer: F.toFixed(1),
+            model: `F = m×a = ${m}×${a} = ${F.toFixed(1)} N.`
+          };
+        }
+      },
+      {
+        topic: 3,
+        type: "equation",
+        question: function() {
+          const F_applied = Math.floor(Math.random() * 50 + 50);
+          const friction = Math.floor(Math.random() * 20 + 10);
+          const netF = F_applied - friction;
+          return {
+            text: `A force of ${F_applied} N is applied while friction opposes with ${friction} N. Calculate the net force.`,
+            answer: netF.toFixed(1),
+            model: `Net force = ${F_applied} - ${friction} = ${netF.toFixed(1)} N.`
+          };
+        }
+      },
+      {
+        topic: 3,
+        type: "equation",
+        question: function() {
+          const m1 = 2, m2 = 3;
+          const u1 = Math.floor(Math.random() * 10 + 5);
+          const u2 = Math.floor(Math.random() * 10);
+          const v1 = ((m1 - m2) / (m1 + m2)) * u1 + ((2 * m2) / (m1 + m2)) * u2;
+          return {
+            text: `A ${m1} kg object moving at ${u1} m/s collides elastically with a ${m2} kg object moving at ${u2} m/s. Calculate the final velocity of the ${m1} kg object.`,
+            answer: v1.toFixed(2),
+            model: `v1 = ((2-3)/(2+3))*${u1} + ((2×3)/(2+3))*${u2} = ${v1.toFixed(2)} m/s.`
+          };
+        }
+      },
+      // Topic 4: Forces, density and pressure (3 questions)
+      {
+        topic: 4,
+        type: "equation",
+        question: function() {
+          const h = Math.floor(Math.random() * 10 + 5);
+          const rho = 1000, g = 9.8;
+          const pressure = rho * g * h;
+          return {
+            text: `Calculate the hydrostatic pressure at a depth of ${h} m in water (density 1000 kg/m³).`,
+            answer: pressure.toFixed(0),
+            model: `Pressure = ρgh = 1000×9.8×${h} = ${pressure.toFixed(0)} Pa.`
+          };
+        }
+      },
+      {
+        topic: 4,
+        type: "equation",
+        question: function() {
+          const V = Math.floor(Math.random() * 100 + 100); // cm³\n          const V_m3 = V / 1e6;\n          const rho = 1000, g = 9.8;\n          const F_b = rho * g * V_m3;\n          return {\n            text: `An object displaces ${V} cm³ of water. Calculate the buoyant force acting on it.`,
+            answer: F_b.toFixed(2),
+            model: `Buoyant force = ρgV = 1000×9.8×(${V}/1e6) = ${F_b.toFixed(2)} N.`
+          };\n        }\n      },
+      {
+        topic: 4,
+        type: "equation",
+        question: function() {
+          const A = Math.floor(Math.random() * 50 + 50); // cm²\n          const A_m2 = A / 10000;\n          const h = Math.floor(Math.random() * 4 + 2);\n          const rho = 1000, g = 9.8;\n          const F = rho * g * h * A_m2;\n          return {\n            text: `A container with a base area of ${A} cm² is filled with water to a height of ${h} m. Calculate the force on the base.`,
+            answer: F.toFixed(1),
+            model: `Force = ρghA = 1000×9.8×${h}×(${A}/10000) = ${F.toFixed(1)} N.`
+          };\n        }\n      },
+      // Topic 5: Work, energy and power (4 questions)
+      {
+        topic: 5,
+        type: "equation",
+        question: function() {
+          const m = Math.floor(Math.random() * 10 + 1);
+          const v = Math.floor(Math.random() * 10 + 1);
+          const KE = 0.5 * m * v * v;
+          return {
+            text: `Calculate the kinetic energy of an object of mass ${m} kg moving at ${v} m/s.`,
+            answer: KE.toFixed(1),
+            model: `KE = ½mv² = 0.5×${m}×${v}² = ${KE.toFixed(1)} J.`
+          };
+        }
+      },
+      {
+        topic: 5,
+        type: "equation",
+        question: function() {
+          const m = Math.floor(Math.random() * 10 + 1);
+          const h = Math.floor(Math.random() * 10 + 1);
+          const g = 9.8;
+          const GPE = m * g * h;
+          return {
+            text: `Calculate the gravitational potential energy of an object of mass ${m} kg raised to a height of ${h} m.`,
+            answer: GPE.toFixed(1),
+            model: `GPE = mgh = ${m}×9.8×${h} = ${GPE.toFixed(1)} J.`
+          };
+        }
+      },
+      {
+        topic: 5,
+        type: "equation",
+        question: function() {
+          const W = Math.floor(Math.random() * 200 + 100);
+          const t = Math.floor(Math.random() * 10 + 1);
+          const P = W / t;
+          return {
+            text: `If ${W} J of work is done in ${t} s, calculate the power output.`,
+            answer: P.toFixed(1),
+            model: `Power = Work/time = ${W}/${t} = ${P.toFixed(1)} W.`
+          };
+        }
+      },
+      {
+        topic: 5,
+        type: "equation",
+        question: function() {
+          const F = Math.floor(Math.random() * 50 + 50);
+          const d = Math.floor(Math.random() * 10 + 5);
+          const work = F * d;
+          return {
+            text: `Calculate the work done when a force of ${F} N moves an object through ${d} m.`,
+            answer: work.toFixed(1),
+            model: `Work = F × d = ${F}×${d} = ${work.toFixed(1)} J.`
+          };
+        }
+      },
+      // Topic 6: Deformation of solids (3 questions)
+      {
+        topic: 6,
+        type: "equation",
+        question: function() {
+          const stress = Math.floor(Math.random() * 10 + 5); // MPa\n          const strain = Math.random() * 0.01 + 0.001;\n          const E = stress / strain;\n          return {\n            text: `A material has a stress of ${stress} MPa and a strain of ${strain.toFixed(4)}. Calculate its Young's modulus in GPa.`,
+            answer: (E/1000).toFixed(2),
+            model: `E = stress/strain = ${stress} MPa / ${strain.toFixed(4)} = ${(E).toFixed(2)} MPa, i.e., ${(E/1000).toFixed(2)} GPa.`
+          };\n        }\n      },
+      {
+        topic: 6,\n        type: "equation",\n        question: function() {\n          const k = Math.floor(Math.random() * 200 + 100);\n          const F = Math.floor(Math.random() * 50 + 10);\n          const extension = F / k;\n          return {\n            text: `A spring with constant ${k} N/m is subjected to a force of ${F} N. Calculate its extension.`,
+            answer: extension.toFixed(3),
+            model: `Extension = F/k = ${F}/${k} = ${extension.toFixed(3)} m.`
+          };\n        }\n      },
+      {
+        topic: 6,\n        type: "equation",\n        question: function() {\n          const L0 = Math.floor(Math.random() * 50 + 50);\n          const L0_m = L0 / 100;\n          const ext = (Math.floor(Math.random() * 5 + 1)) / 100;\n          const strain = ext / L0_m;\n          return {\n            text: `A rod of original length ${L0} cm is extended by ${ext.toFixed(2)} m. Calculate the strain.`,
+            answer: strain.toFixed(3),
+            model: `Strain = extension/original length = ${ext.toFixed(2)} / (${L0}/100) = ${strain.toFixed(3)}.`
+          };\n        }\n      },
+      // Topic 7: Waves (6 questions)\n
+      {
+        topic: 7,
+        type: "equation",
+        question: function() {
+          const n = Math.floor(Math.random() * 3 + 1);
+          const L = Math.floor(Math.random() * 3 + 1);
+          const v = Math.floor(Math.random() * 200 + 100);
+          const f = (n * v) / (2 * L);
+          return {
+            text: `A pipe closed at both ends has a length of ${L} m and a wave speed of ${v} m/s. Calculate the frequency of the ${n}th harmonic.`,
+            answer: f.toFixed(1),
+            model: `f = n·v/(2L) = ${n}×${v}/(2×${L}) = ${f.toFixed(1)} Hz.`
+          };
+        }
+      },
+      {
+        topic: 7,
+        type: "equation",
+        question: function() {
+          const d = (Math.floor(Math.random() * 4 + 1)) / 1000;
+          const D = Math.floor(Math.random() * 100 + 100);
+          const x = (Math.floor(Math.random() * 20 + 10)) / 1000;
+          const lambda = (d * x) / (D / 100);
+          return {
+            text: `In a double-slit experiment, with slit separation ${(d*1000).toFixed(1)} mm, screen distance ${D} cm, and fringe spacing ${(x*1000).toFixed(1)} mm, calculate the wavelength in nm.`,
+            answer: (lambda * 1e9).toFixed(1),
+            model: `λ = (d×x)/(D/100) = (${d}×${x})/( ${D}/100) = ${(lambda*1e9).toFixed(1)} nm.`
+          };
+        }
+      },
+      {
+        topic: 7,
+        type: "equation",
+        question: function() {
+          const n = Math.floor(Math.random() * 3 + 1);
+          const v = Math.floor(Math.random() * 100 + 300);
+          const L = Math.floor(Math.random() * 3 + 1);
+          const f = v / (4 * L);
+          const T = 1 / f;
+          return {
+            multi: true,
+            text: `A pipe closed at one end has a length of ${L} m with a sound speed of ${v} m/s.\n(a) Calculate the fundamental frequency.\n(b) Calculate the time period.`,
+            answers: { a: f.toFixed(1), b: T.toFixed(3) },
+            model: { a: `f = v/(4L) = ${v}/(4×${L}) = ${f.toFixed(1)} Hz`, b: `T = 1/f = 1/${f.toFixed(1)} = ${T.toFixed(3)} s` }
+          };
+        }
+      },
+      {
+        topic: 7,
+        type: "equation",
+        question: function() {
+          const L = Math.floor(Math.random() * 3 + 1);
+          const v = Math.floor(Math.random() * 100 + 300);
+          const f = v / (2 * L);
+          const T = 1 / f;
+          return {
+            multi: true,
+            text: `A pipe open at both ends has a length of ${L} m with a sound speed of ${v} m/s.\n(a) Calculate the fundamental frequency.\n(b) Calculate the time period.`,
+            answers: { a: f.toFixed(1), b: T.toFixed(3) },
+            model: { a: `f = v/(2L) = ${v}/(2×${L}) = ${f.toFixed(1)} Hz`, b: `T = 1/f = 1/${f.toFixed(1)} = ${T.toFixed(3)} s` }
+          };
+        }
+      },
+      // Topic 8: Superposition (4 questions)\n
+      {
+        topic: 8,
+        type: "equation",
+        question: function() {
+          const A1 = Math.floor(Math.random() * 5 + 5);
+          const A2 = Math.floor(Math.random() * 5 + 5);
+          const resultAmp = A1 + A2;
+          return {
+            text: `Two waves with amplitudes ${A1} and ${A2} add constructively. Calculate the resultant amplitude.`,
+            answer: resultAmp.toFixed(1),
+            model: `Resultant amplitude = ${A1} + ${A2} = ${resultAmp}.`
+          };
+        }
+      },
+      {
+        topic: 8,
+        type: "equation",
+        question: function() {
+          const A1 = Math.floor(Math.random() * 5 + 5);
+          const A2 = Math.floor(Math.random() * 5 + 1);
+          const resultAmp = Math.abs(A1 - A2);
+          return {
+            text: `Two waves with amplitudes ${A1} and ${A2} combine destructively. Calculate the resultant amplitude.`,
+            answer: resultAmp.toFixed(1),
+            model: `Resultant amplitude = |${A1} - ${A2}| = ${resultAmp}.`
+          };
+        }
+      },
+      {
+        topic: 8,
+        type: "equation",
+        question: function() {
+          const A1 = Math.floor(Math.random() * 5 + 5);
+          const A2 = Math.floor(Math.random() * 5 + 5);
+          const phi = Math.floor(Math.random() * 90 + 10);
+          const A = Math.sqrt(A1*A1 + A2*A2 + 2*A1*A2*Math.cos(phi*Math.PI/180));
+          return {
+            text: `Two waves of amplitudes ${A1} and ${A2} combine with a phase difference of ${phi}°. Calculate the resultant amplitude.`,
+            answer: A.toFixed(1),
+            model: `Resultant amplitude = √(${A1}² + ${A2}² + 2×${A1}×${A2}×cos(${phi}°)) = ${A.toFixed(1)}.`
+          };
+        }
+      },
+      {
+        topic: 8,
+        type: "equation",
+        question: function() {
+          const A = Math.floor(Math.random() * 5 + 5);
+          const phaseDiff = Math.floor(Math.random() * 90 + 10);
+          const resultAmp = 2 * A * Math.cos((phaseDiff/2) * Math.PI/180);
+          return {
+            text: `Two identical waves each of amplitude ${A} combine with a phase difference of ${phaseDiff}°. Calculate the resultant amplitude using 2A cos(φ/2).`,
+            answer: resultAmp.toFixed(1),
+            model: `Resultant amplitude = 2×${A}×cos(${phaseDiff}/2) = ${resultAmp.toFixed(1)}.`
+          };
+        }
+      },
+      // Topic 9: Electricity (5 questions)\n
+      {
+        topic: 9,
+        type: "equation",
+        question: function() {
+          const I = Math.floor(Math.random() * 5 + 1);
+          const R = Math.floor(Math.random() * 20 + 10);
+          const V = I * R;
+          return {
+            text: `An electric current of ${I} A flows through a resistor of ${R} Ω. Calculate the voltage.`,
+            answer: V.toFixed(1),
+            model: `V = I×R = ${I}×${R} = ${V.toFixed(1)} V.`
+          };
+        }
+      },
+      {
+        topic: 9,
+        type: "equation",
+        question: function() {
+          const V1 = Math.floor(Math.random() * 10 + 10);
+          const V2 = Math.floor(Math.random() * 5 + 5);
+          const R = Math.floor(Math.random() * 20 + 10);
+          const I = Math.floor(Math.random() * 3 + 1);
+          const Vr = I * R;
+          return {
+            text: `In a loop with batteries of ${V1} V and ${V2} V and a resistor of ${R} Ω carrying ${I} A, calculate the voltage drop across the resistor.`,
+            answer: Vr.toFixed(1),
+            model: `Vr = I×R = ${I}×${R} = ${Vr.toFixed(1)} V.`
+          };
+        }
+      },
+      {
+        topic: 9,
+        type: "equation",
+        question: function() {
+          const V = Math.floor(Math.random() * 20 + 10);
+          const I = Math.floor(Math.random() * 5 + 1);
+          const P = V * I;
+          return {
+            text: `Calculate the power of a circuit with voltage ${V} V and current ${I} A.`,
+            answer: P.toFixed(1),
+            model: `P = V×I = ${V}×${I} = ${P.toFixed(1)} W.`
+          };
+        }
+      },
+      {
+        topic: 9,
+        type: "equation",
+        question: function() {
+          const R1 = Math.floor(Math.random() * 20 + 10);
+          const R2 = Math.floor(Math.random() * 20 + 10);
+          const R3 = Math.floor(Math.random() * 20 + 10);
+          const Rp = 1 / (1/R1 + 1/R2);
+          const R_total = Rp + R3;
+          return {
+            text: `Calculate the total resistance of resistors of ${R1} Ω and ${R2} Ω in parallel, in series with a ${R3} Ω resistor.`,
+            answer: R_total.toFixed(1),
+            model: `Rp = 1/(1/${R1}+1/${R2}) = ${Rp.toFixed(1)} Ω, then R_total = Rp + ${R3} = ${R_total.toFixed(1)} Ω.`
+          };
+        }
+      },
+      // Topic 10: D.C. circuits (5 questions)\n
+      {
+        topic: 10,
+        type: "equation",
+        question: function() {
+          const R1 = Math.floor(Math.random() * 50 + 50);
+          const R2 = Math.floor(Math.random() * 50 + 50);
+          const Vin = Math.floor(Math.random() * 20 + 10);
+          const Vout = Vin * (R2 / (R1 + R2));
+          return {
+            text: `In a voltage divider with resistors of ${R1} Ω and ${R2} Ω and an input voltage of ${Vin} V, calculate the output voltage across the ${R2} Ω resistor.`,
+            answer: Vout.toFixed(1),
+            model: `Vout = Vin×(R2/(R1+R2)) = ${Vin}×(${R2}/(${R1}+${R2})) = ${Vout.toFixed(1)} V.`
+          };
+        }
+      },
+      {
+        topic: 10,
+        type: "equation",
+        question: function() {
+          const Vin = Math.floor(Math.random() * 20 + 10);
+          const R_total = Math.floor(Math.random() * 100 + 100);
+          const I = Vin / R_total;
+          return {
+            text: `Calculate the current in a series circuit with total resistance ${R_total} Ω and supply voltage ${Vin} V.`,
+            answer: I.toFixed(2),
+            model: `I = V/R = ${Vin}/${R_total} = ${I.toFixed(2)} A.`
+          };
+        }
+      },
+      {
+        topic: 10,
+        type: "equation",
+        question: function() {
+          const I = Math.floor(Math.random() * 5 + 1);
+          const R = Math.floor(Math.random() * 100 + 50);
+          const P = I * I * R;
+          return {
+            text: `Calculate the power dissipated in a resistor of ${R} Ω with a current of ${I} A.`,
+            answer: P.toFixed(1),
+            model: `P = I²R = ${I}²×${R} = ${P.toFixed(1)} W.`
+          };
+        }
+      },
+      {
+        topic: 10,
+        type: "equation",
+        question: function() {
+          const R1 = Math.floor(Math.random() * 50 + 50);
+          const R2 = Math.floor(Math.random() * 50 + 50);
+          const R3 = Math.floor(Math.random() * 50 + 50);
+          const R_total = R1 + R2 + R3;
+          return {
+            text: `Three resistors of ${R1} Ω, ${R2} Ω, and ${R3} Ω are connected in series. Calculate the total resistance.`,
+            answer: R_total.toFixed(1),
+            model: `R_total = R1 + R2 + R3 = ${R1} + ${R2} + ${R3} = ${R_total} Ω.`
+          };
+        }
+      },
+      {
+        topic: 10,
+        type: "equation",
+        question: function() {
+          // Voltage divider with three resistors: Let R1 and R2 in series, then in parallel with R3 (example variant)\n          const R1 = Math.floor(Math.random() * 50 + 50);\n          const R2 = Math.floor(Math.random() * 50 + 50);\n          const R3 = Math.floor(Math.random() * 50 + 50);\n          const Vin = Math.floor(Math.random() * 20 + 10);\n          // For simplicity, assume R1 and R2 are in series to give Rp, then Rp in parallel with R3: 1/R_total = 1/Rp + 1/R3\n          const Rp = R1 + R2;\n          const R_total = 1 / (1/Rp + 1/R3);\n          return {\n            text: `In a circuit, resistors of ${R1} Ω and ${R2} Ω are connected in series, and this combination is in parallel with a ${R3} Ω resistor. Given an input voltage of ${Vin} V, calculate the equivalent resistance of the circuit.`,
+            answer: R_total.toFixed(1),\n            model: `Rp = ${R1}+${R2} = ${Rp} Ω, then R_total = 1/(1/Rp + 1/R3) = ${R_total.toFixed(1)} Ω.`
+          };\n        }\n      },
+      // Topic 11: Particle and nuclear physics (5 questions)\n
+      {
+        topic: 11,
+        type: "equation",
+        question: function() {
+          const initialN = Math.floor(Math.random() * 50 + 50);
+          return {
+            text: `In beta-minus decay, if a nucleus has a nucleon number of ${initialN}, what is its nucleon number after decay?`,
+            answer: initialN.toString(),
+            model: `Nucleon number is conserved, so it remains ${initialN}.`
+          };
+        }
+      },
+      {
+        topic: 11,
+        type: "equation",
+        question: function() {
+          const initialZ = Math.floor(Math.random() * 20 + 10);
+          const finalZ = initialZ - 1;
+          return {
+            text: `A nucleus with a proton number of ${initialZ} undergoes beta-plus decay. What is its new proton number?`,
+            answer: finalZ.toString(),
+            model: `Proton number decreases by 1: ${initialZ} - 1 = ${finalZ}.`
+          };
+        }
+      },
+      {
+        topic: 11,
+        type: "equation",
+        question: function() {
+          const initialMass = Math.floor(Math.random() * 200 + 100);
+          const finalMass = initialMass - 4;
+          return {
+            text: `A nucleus with a mass number of ${initialMass} undergoes alpha decay. What is its new mass number?`,
+            answer: finalMass.toString(),
+            model: `Alpha decay reduces mass number by 4: ${initialMass} - 4 = ${finalMass}.`
+          };
+        }
+      },
+      {
+        topic: 11,
+        type: "equation",
+        question: function() {
+          const Q = Math.floor(Math.random() * 10 + 5);
+          return {
+            text: `In an alpha decay, if the Q-value is ${Q} MeV, what is the kinetic energy of the emitted alpha particle (in MeV)?`,
+            answer: Q.toString(),
+            model: `The kinetic energy equals the Q-value, so it is ${Q} MeV.`
+          };
+        }
+      },
+      {
+        topic: 11,
+        type: "equation",
+        question: function() {
+          const initialMass = Math.floor(Math.random() * 200 + 100);
+          const change = 4;
+          return {
+            text: `A nucleus with mass number ${initialMass} undergoes alpha decay. By how much does its mass number change?`,
+            answer: change.toString(),
+            model: `Alpha decay reduces the mass number by 4.`
           };
         }
       }
@@ -133,7 +744,7 @@
       const filtered = questionBank.map(q => {
         if (typeof q.question === 'function') {
           const built = q.question();
-          return { ...q, text: built.text, model: built.model, answer: built.answer, image: built.image || null };
+          return { ...q, text: built.text, model: built.model, answer: built.answer, answers: built.answers, image: built.image || null, multi: built.multi || false };
         }
         return q;
       }).filter(q => {
@@ -151,15 +762,51 @@
 
       const q = filtered[Math.floor(Math.random() * filtered.length)];
       currentQuestion = q;
-      document.getElementById("question-box").innerHTML = `
-        <strong>Question:</strong> ${q.text}<br><br>
-        ${q.image ? "<img class='question-img' src='" + q.image + "' alt='diagram'>" : ""}
-        <textarea id='student-answer' rows='3' style='width:100%' placeholder='Type your answer here...'></textarea><br>
-        <button onclick='checkDefinition()'>Check Answer</button>
-        <button onclick='showModelAnswer()'>Show Model Answer</button>
-        <button onclick='askNewQuestion()'>Next Question</button>
-        <div id='feedback' style='margin-top: 10px; font-weight: bold;'></div>
-      `;
+      if (q.multi) {
+        document.getElementById("question-box").innerHTML = `
+          <strong>Question:</strong><br>${q.text}<br>
+          ${q.image ? "<img class='question-img' src='" + q.image + "' alt='diagram'>" : ""}
+          <br>(a) <input type='text' id='part-a' placeholder='Answer to part a'><br>
+          (b) <input type='text' id='part-b' placeholder='Answer to part b'><br>
+          (c) <input type='text' id='part-c' placeholder='Answer to part c'><br>
+          <button onclick='checkMultiPart()'>Check Answers</button>
+          <button onclick='showModelAnswer()'>Show Model Answer</button>
+          <button onclick='askNewQuestion()'>Next Question</button>
+          <div id='feedback' style='margin-top: 10px; font-weight: bold;'></div>
+        `;
+      } else {
+        document.getElementById("question-box").innerHTML = `
+          <strong>Question:</strong> ${q.text}<br><br>
+          ${q.image ? "<img class='question-img' src='" + q.image + "' alt='diagram'>" : ""}
+          <textarea id='student-answer' rows='3' style='width:100%' placeholder='Type your answer here...'></textarea><br>
+          <button onclick='checkDefinition()'>Check Answer</button>
+          <button onclick='showModelAnswer()'>Show Model Answer</button>
+          <button onclick='askNewQuestion()'>Next Question</button>
+          <div id='feedback' style='margin-top: 10px; font-weight: bold;'></div>
+        `;
+      }
+    }
+
+    function checkMultiPart() {
+      const q = currentQuestion;
+      const a = parseFloat(document.getElementById("part-a").value);
+      const b = parseFloat(document.getElementById("part-b").value);
+      const c = parseFloat(document.getElementById("part-c").value);
+      let feedback = "<strong>Feedback:</strong><br>";
+      let scoreThis = 0;
+
+      if (Math.abs(a - q.answers.a) < 0.1) { feedback += "✅ Part (a) correct<br>"; scoreThis++; }
+      else { feedback += `✘ Part (a) incorrect. Ans: ${q.answers.a}<br>`; }
+
+      if (Math.abs(b - q.answers.b) < 0.1) { feedback += "✅ Part (b) correct<br>"; scoreThis++; }
+      else { feedback += `✘ Part (b) incorrect. Ans: ${q.answers.b}<br>`; }
+
+      if (Math.abs(c - q.answers.c) < 0.1) { feedback += "✅ Part (c) correct<br>"; scoreThis++; }
+      else { feedback += `✘ Part (c) incorrect. Ans: ${q.answers.c}<br>`; }
+
+      score += scoreThis;
+      document.getElementById("score").innerText = score;
+      document.getElementById("feedback").innerHTML = feedback + `<br><em>Model Answer:</em><br>a) ${q.model.a}<br>b) ${q.model.b}<br>c) ${q.model.c}`;
     }
 
     function checkDefinition() {
@@ -168,8 +815,10 @@
       let result = "";
 
       if (q.type === "equation") {
-        const isCorrect = Math.abs(parseFloat(input) - parseFloat(q.answer)) < 0.1;
-        result = isCorrect ? `✅ Correct!` : `✘ Not quite. Correct answer: ${q.answer}`;
+        const expected = q.answer.split(',').map(s => s.trim());
+        const provided = input.split(',').map(s => s.trim());
+        const isCorrect = expected.every((val, i) => Math.abs(parseFloat(val) - parseFloat(provided[i])) < 0.1);
+        result = isCorrect ? "✅ Correct!" : `✘ Not quite. Correct answer: ${q.answer}`;
         if (isCorrect) score++;
       }
 
@@ -180,11 +829,14 @@
 
     function showModelAnswer() {
       const q = currentQuestion;
-      document.getElementById("feedback").innerHTML = `<em>Model Answer:</em> ${q.model}`;
+      if (q.multi) {
+        document.getElementById("feedback").innerHTML = `<em>Model Answer:</em><br>a) ${q.model.a}<br>b) ${q.model.b}<br>c) ${q.model.c}`;
+      } else {
+        document.getElementById("feedback").innerHTML = `<em>Model Answer:</em> ${q.model}`;
+      }
     }
 
     generateTopicCheckboxes();
   </script>
 </body>
 </html>
-
