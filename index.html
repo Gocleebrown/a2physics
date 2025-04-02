@@ -153,7 +153,7 @@
       currentQuestion = q;
       document.getElementById("question-box").innerHTML = `
         <strong>Question:</strong> ${q.text}<br><br>
-        ${q.image ? `<img class='question-img' src='${q.image}' alt='diagram'>` : ''}
+        ${q.image ? "<img class='question-img' src='" + q.image + "' alt='diagram'>" : ""}
         <textarea id='student-answer' rows='3' style='width:100%' placeholder='Type your answer here...'></textarea><br>
         <button onclick='checkDefinition()'>Check Answer</button>
         <button onclick='showModelAnswer()'>Show Model Answer</button>
