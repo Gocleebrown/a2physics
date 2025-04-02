@@ -80,12 +80,111 @@
       all.forEach(box => box.checked = isChecked);
     }
 
-    const questionBank = [];
+    const questionBank = [
+      {
+        topic: 2,
+        type: "equation",
+        question: function() {
+          const u = Math.floor(Math.random() * 10 + 5);
+          const a = Math.floor(Math.random() * 4 + 1);
+          const t = Math.floor(Math.random() * 4 + 2);
+          const s = u * t + 0.5 * a * t * t;
+          return {
+            text: `A body starts with an initial speed of ${u} m/s and accelerates at ${a} m/s² for ${t} seconds. Calculate the displacement.`,
+            answer: s.toFixed(1),
+            model: `Use s = ut + 0.5at² = ${u}*${t} + 0.5*${a}*${t}² = ${s.toFixed(1)} m`
+          };
+        }
+      },
+      {
+        topic: 2,
+        type: "equation",
+        question: function() {
+          const m = Math.floor(Math.random() * 20 + 5);
+          const angle = Math.floor(Math.random() * 30 + 10);
+          const d = Math.floor(Math.random() * 10 + 2);
+          const g = 9.8;
+          const radians = angle * Math.PI / 180;
+          const a = g * Math.sin(radians);
+          const vSquared = 2 * a * d;
+          const v = Math.sqrt(vSquared);
+          return {
+            text: `A ${m} kg block slides down a frictionless slope inclined at ${angle}°. It travels ${d} m. Calculate the speed at the bottom.`,
+            answer: v.toFixed(2),
+            model: `a = g·sin(θ) = 9.8·sin(${angle}°) = ${a.toFixed(2)} m/s², then v² = 2ad = ${vSquared.toFixed(2)} ⇒ v = ${v.toFixed(2)} m/s`,
+            image: `https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Free_body_diagram_-_inclined_plane_no_friction.svg/640px-Free_body_diagram_-_inclined_plane_no_friction.svg.png`
+          };
+        }
+      }
+    ];
 
-    // Placeholder for appending all definitions from all topics again.
-    // This should be followed by inserting all the previously included definitions.
+    let currentQuestion = null;
+    let score = 0;
+
+    function startPractice() {
+      score = 0;
+      document.getElementById("score").innerText = score;
+      askNewQuestion();
+      document.getElementById("question-box").scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function askNewQuestion() {
+      const ids = [...document.querySelectorAll("input[type='checkbox']")].filter(cb => cb.checked).map(cb => cb.id);
+      const filtered = questionBank.map(q => {
+        if (typeof q.question === 'function') {
+          const built = q.question();
+          return { ...q, text: built.text, model: built.model, answer: built.answer, image: built.image || null };
+        }
+        return q;
+      }).filter(q => {
+        return ids.some(id => {
+          const topicMatch = id.includes(`topic${q.topic}`) || id.startsWith("whole");
+          const typeMatch = (id.endsWith("defs") && q.type === "definition") || (id.endsWith("eqs") && q.type === "equation");
+          return topicMatch && typeMatch;
+        });
+      });
+
+      if (filtered.length === 0) {
+        document.getElementById("question-box").innerText = "No matching questions available yet.";
+        return;
+      }
+
+      const q = filtered[Math.floor(Math.random() * filtered.length)];
+      currentQuestion = q;
+      document.getElementById("question-box").innerHTML = `
+        <strong>Question:</strong> ${q.text}<br><br>
+        ${q.image ? `<img class='question-img' src='${q.image}' alt='diagram'>` : ''}
+        <textarea id='student-answer' rows='3' style='width:100%' placeholder='Type your answer here...'></textarea><br>
+        <button onclick='checkDefinition()'>Check Answer</button>
+        <button onclick='showModelAnswer()'>Show Model Answer</button>
+        <button onclick='askNewQuestion()'>Next Question</button>
+        <div id='feedback' style='margin-top: 10px; font-weight: bold;'></div>
+      `;
+    }
+
+    function checkDefinition() {
+      const q = currentQuestion;
+      const input = document.getElementById("student-answer").value.toLowerCase();
+      let result = "";
+
+      if (q.type === "equation") {
+        const isCorrect = Math.abs(parseFloat(input) - parseFloat(q.answer)) < 0.1;
+        result = isCorrect ? `✅ Correct!` : `✘ Not quite. Correct answer: ${q.answer}`;
+        if (isCorrect) score++;
+      }
+
+      result += `<br><em>Model Answer:</em> ${q.model}`;
+      document.getElementById("score").innerText = score;
+      document.getElementById("feedback").innerHTML = result;
+    }
+
+    function showModelAnswer() {
+      const q = currentQuestion;
+      document.getElementById("feedback").innerHTML = `<em>Model Answer:</em> ${q.model}`;
+    }
 
     generateTopicCheckboxes();
   </script>
 </body>
 </html>
+
