@@ -42,21 +42,15 @@
 </head>
 <body>
   <h1>Cambridge Physics 9702 Practice Hub</h1>
-  
+
   <!-- Whole Course Section -->
   <div class="section">
     <h2>Whole Course</h2>
-    <label>
-      <input type="checkbox" id="whole-defs" onchange="toggleByGroup('defs', this.checked)">
-      Definitions
-    </label>
-    <label>
-      <input type="checkbox" id="whole-eqs" onchange="toggleByGroup('eqs', this.checked)">
-      Equations
-    </label>
+    <label><input type="checkbox" id="whole-defs" onchange="toggleByGroup('defs', this.checked)"> Definitions</label>
+    <label><input type="checkbox" id="whole-eqs" onchange="toggleByGroup('eqs', this.checked)"> Equations</label>
     <button onclick="startPractice()">Start Practice</button>
   </div>
-  
+
   <!-- By Topic Section -->
   <div class="section">
     <h2>By Topic</h2>
@@ -65,12 +59,12 @@
       <div class="topic-column" id="topic-columns-right"></div>
     </div>
   </div>
-  
-  <!-- Additional Start Practice Button -->
+
+  <!-- Another Start Practice Button -->
   <div class="section">
     <button onclick="startPractice()">Start Practice</button>
   </div>
-  
+
   <div id="score-box">Score: <span id="score">0</span></div>
   <div id="question-box"></div>
   
@@ -85,10 +79,13 @@
     <label for="difficulty-hard">Hard</label><br>
   </div>
   
+  <!-- Container for dynamic SVG diagrams -->
   <div id="diagramContainer"></div>
   
+  <!-- Container for answer inputs -->
   <div id="answerInputs"></div>
   
+  <!-- Feedback message -->
   <div id="feedback"></div>
   
   <script>
@@ -114,7 +111,7 @@
       return arr[Math.floor(Math.random() * arr.length)];
     }
     
-    // Inline SVG for slope questions
+    // Inline SVG for slope questions (geometry fixed, text labels update)
     function createSlopeSVG(mass, angle, distance) {
       return `
       <svg width="300" height="200" class="question-img" style="border:1px solid #ccc">
@@ -141,7 +138,7 @@
       "Particle and nuclear physics"
     ];
     
-    // Generate topic checkboxes
+    // Generate topic checkboxes in two columns
     function generateTopicCheckboxes() {
       const left = document.getElementById("topic-columns-left");
       const right = document.getElementById("topic-columns-right");
@@ -157,7 +154,7 @@
       });
     }
     
-    // Toggle checkboxes
+    // Toggle checkboxes for a given type
     function toggleByGroup(typeSuffix, isChecked) {
       const boxes = document.querySelectorAll(`input[id$="-${typeSuffix}"]`);
       boxes.forEach(box => box.checked = isChecked);
@@ -165,34 +162,22 @@
     
     // Full Question Bank
     const questionBank = [
-      // Topic 1: Physical quantities and units
+      // --- Topic 1: Physical quantities and units ---
       {
         topic: 1, difficulty: "easy", type: "equation",
-        question: function() {
-          const km = 3.2, m = km * 1000;
-          return { text: `Convert ${km} km to meters.`, answer: m.toFixed(0), modelAnswer: `${km} km = ${m} m.` };
-        }
+        question: function() { const km = 3.2, m = km * 1000; return { text: `Convert ${km} km to meters.`, answer: m.toFixed(0), modelAnswer: `${km} km = ${m} m.` }; }
       },
       {
         topic: 1, difficulty: "easy", type: "equation",
-        question: function() {
-          const grams = 5000, kg = grams/1000;
-          return { text: `Express ${grams} g in kilograms.`, answer: kg.toFixed(1), modelAnswer: `${grams} g = ${kg} kg.` };
-        }
+        question: function() { const grams = 5000, kg = grams/1000; return { text: `Express ${grams} g in kilograms.`, answer: kg.toFixed(1), modelAnswer: `${grams} g = ${kg} kg.` }; }
       },
       {
         topic: 1, difficulty: "easy", type: "equation",
-        question: function() {
-          const km = 60, hr = 1, mps = (km*1000)/(hr*3600);
-          return { text: `A car travels ${km} km in ${hr} hour. What is its speed (m/s)?`, answer: mps.toFixed(2), modelAnswer: `Speed ≈ ${mps.toFixed(2)} m/s.` };
-        }
+        question: function() { const km = 60, hr = 1, mps = (km*1000)/(hr*3600); return { text: `A car travels ${km} km in ${hr} hour. What is its speed (m/s)?`, answer: mps.toFixed(2), modelAnswer: `Speed ≈ ${mps.toFixed(2)} m/s.` }; }
       },
       {
         topic: 1, difficulty: "easy", type: "equation",
-        question: function() {
-          const mass_g = 2000, volume_cm3 = 500, density = (mass_g/1000)/(volume_cm3/1e6);
-          return { text: `Find density of a substance with ${mass_g} g and ${volume_cm3} cm³.`, answer: density.toFixed(0), modelAnswer: `Density ≈ ${density.toFixed(0)} kg/m³.` };
-        }
+        question: function() { const mass_g = 2000, volume_cm3 = 500, density = (mass_g/1000)/(volume_cm3/1e6); return { text: `Find density of a substance with ${mass_g} g and ${volume_cm3} cm³.`, answer: density.toFixed(0), modelAnswer: `Density ≈ ${density.toFixed(0)} kg/m³.` }; }
       },
       {
         topic: 1, difficulty: "easy", type: "definition",
@@ -342,18 +327,19 @@
       },
       {
         topic: 3, difficulty: "easy", type: "equation",
-        question: function() { const F_applied = Math.floor(Math.random()*50+50), friction = Math.floor(Math.random()*20+10), netF = F_applied-friction; return { text: `A force of ${F_applied} N and friction of ${friction} N oppose. Find net force.`, answer: netF.toFixed(1), modelAnswer: `Net force ≈ ${netF.toFixed(1)} N.` }; }
+        question: function() { const F_applied = Math.floor(Math.random()*50+50), friction = Math.floor(Math.random()*20+10), netF = F_applied - friction; return { text: `A force of ${F_applied} N and friction of ${friction} N oppose. Find the net force.`, answer: netF.toFixed(1), modelAnswer: `Net force ≈ ${netF.toFixed(1)} N.` }; }
       },
       {
         topic: 3, difficulty: "hard", type: "numeric_multi",
-        question: function() {
-          const m1 = 2, m2 = 3, u1 = Math.floor(Math.random()*10+5), u2 = Math.floor(Math.random()*10), v1 = ((m1-m2)/(m1+m2))*u1 + ((2*m2)/(m1+m2))*u2;
-          return { text: `A ${m1} kg object at ${u1} m/s collides elastically with a ${m2} kg object at ${u2} m/s. Find final speed of the ${m1} kg object.`, answer: v1.toFixed(2), modelAnswer: `Final speed ≈ ${v1.toFixed(2)} m/s.` };
+        question: function() { 
+          const m1 = 2, m2 = 3, u1 = Math.floor(Math.random()*10+5), u2 = Math.floor(Math.random()*10), 
+                v1 = ((m1-m2)/(m1+m2))*u1 + ((2*m2)/(m1+m2))*u2;
+          return { text: `A ${m1} kg object at ${u1} m/s collides elastically with a ${m2} kg object at ${u2} m/s. Find the final speed of the ${m1} kg object.`, answer: v1.toFixed(2), modelAnswer: `Final speed ≈ ${v1.toFixed(2)} m/s.` };
         }
       },
       {
         topic: 3, difficulty: "hard", type: "numeric_multi",
-        question: function() {
+        question: function() { 
           const m1 = 2, m2 = 3, v1i = 5, v1f = 3, theta1 = 30;
           const v1fx = v1f * Math.cos(theta1*Math.PI/180);
           const v1fy = v1f * Math.sin(theta1*Math.PI/180);
@@ -363,7 +349,7 @@
           const v2fy = - (m1*v1fy)/m2;
           const v2f = Math.sqrt(v2fx*v2fx + v2fy*v2fy);
           const theta2 = Math.atan2(v2fy, v2fx)*(180/Math.PI);
-          return { text: `A 2 kg ball at 5 m/s collides with a 3 kg ball at rest. After collision, the 2 kg ball goes 3 m/s at 30° above horizontal. Find: (a) speed of the 3 kg ball, (b) its angle (negative if below horizontal).`, answer: [v2f.toFixed(2), theta2.toFixed(2)], modelAnswer: [`Speed ≈ ${v2f.toFixed(2)} m/s`, `Angle ≈ ${theta2.toFixed(2)}°`] };
+          return { text: `A 2 kg ball at 5 m/s collides with a 3 kg ball at rest. After collision, the 2 kg ball moves at 3 m/s at 30° above horizontal. Find: (a) the speed of the 3 kg ball, (b) its angle (negative if below horizontal).`, answer: [v2f.toFixed(2), theta2.toFixed(2)], modelAnswer: [`Speed ≈ ${v2f.toFixed(2)} m/s`, `Angle ≈ ${theta2.toFixed(2)}°`] };
         }
       },
       {
@@ -398,11 +384,11 @@
       },
       {
         topic: 4, difficulty: "easy", type: "equation",
-        question: function() { const V = Math.floor(Math.random()*100+100), rho = 1000, g = 9.8, V_m3 = V/1e6, F_b = rho*g*V_m3; return { text: `An object displaces ${V} cm³ of water. Find buoyant force (N).`, answer: F_b.toFixed(2), modelAnswer: `Buoyant force ≈ ${F_b.toFixed(2)} N.` }; }
+        question: function() { const V = Math.floor(Math.random()*100+100), rho = 1000, g = 9.8, V_m3 = V/1e6, F_b = rho*g*V_m3; return { text: `An object displaces ${V} cm³ of water. Find the buoyant force (N).`, answer: F_b.toFixed(2), modelAnswer: `Buoyant force ≈ ${F_b.toFixed(2)} N.` }; }
       },
       {
         topic: 4, difficulty: "easy", type: "equation",
-        question: function() { const A = Math.floor(Math.random()*50+50), h = Math.floor(Math.random()*4+2), rho = 1000, g = 9.8, A_m2 = A/10000, F = rho*g*h*A_m2; return { text: `For a container with base area ${A} cm² and water height ${h} m, find force on base (N).`, answer: F.toFixed(1), modelAnswer: `Force ≈ ${F.toFixed(1)} N.` }; }
+        question: function() { const A = Math.floor(Math.random()*50+50), h = Math.floor(Math.random()*4+2), rho = 1000, g = 9.8, A_m2 = A/10000, F = rho*g*h*A_m2; return { text: `For a container with base area ${A} cm² and water height ${h} m, find the force on the base (N).`, answer: F.toFixed(1), modelAnswer: `Force ≈ ${F.toFixed(1)} N.` }; }
       },
       {
         topic: 4, difficulty: "easy", type: "definition",
@@ -540,11 +526,11 @@
       },
       {
         topic: 7, difficulty: "easy", type: "equation",
-        question: function() { const d = (Math.floor(Math.random()*4+1))/1000, D = Math.floor(Math.random()*100+100), x = (Math.floor(Math.random()*20+10))/1000, lambda = (d*x)/(D/100); return { text: `In a double-slit experiment (slit separation ${(d*1000).toFixed(1)} mm, screen ${D} cm, fringe spacing ${(x*1000).toFixed(1)} mm), find wavelength (nm).`, answer: (lambda*1e9).toFixed(1), modelAnswer: `Wavelength ≈ ${(lambda*1e9).toFixed(1)} nm.` }; }
+        question: function() { const d = (Math.floor(Math.random()*4+1))/1000, D = Math.floor(Math.random()*100+100), x = (Math.floor(Math.random()*20+10))/1000, lambda = (d*x)/(D/100); return { text: `In a double-slit experiment (slit separation ${(d*1000).toFixed(1)} mm, screen ${D} cm, fringe spacing ${(x*1000).toFixed(1)} mm), find the wavelength (nm).`, answer: (lambda*1e9).toFixed(1), modelAnswer: `Wavelength ≈ ${(lambda*1e9).toFixed(1)} nm.` }; }
       },
       {
         topic: 7, difficulty: "easy", type: "equation",
-        question: function() { const L = Math.floor(Math.random()*3+1), v = Math.floor(Math.random()*100+300), f = v/(2*L), T = 1/f; return { text: `A pipe open at both ends (length ${L} m, sound speed ${v} m/s) vibrates. (a) Find the fundamental frequency, (b) the time period.`, answer: [f.toFixed(1), T.toFixed(3)], modelAnswer: [`Fundamental frequency ≈ ${f.toFixed(1)} Hz`, `Time period ≈ ${T.toFixed(3)} s`], type: "numeric_multi", multi: true }; }
+        question: function() { const L = Math.floor(Math.random()*3+1), v = Math.floor(Math.random()*100+300), f = v/(2*L), T = 1/f; return { text: `A pipe open at both ends (length ${L} m, sound speed ${v} m/s) vibrates. (a) Find the fundamental frequency, (b) the time period.`, answer: [f.toFixed(1), T.toFixed(3)], modelAnswer: [`Fundamental frequency ≈ ${f.toFixed(1)} Hz`, `Time period ≈ ${T.toFixed(3)} s`], type:"numeric_multi", multi:true }; }
       },
       {
         topic: 7, difficulty: "easy", type: "definition",
@@ -566,7 +552,7 @@
       },
       {
         topic: 7, difficulty: "hard", type: "numeric_multi",
-        question: function() { const L = 2, v = 305, f = v/(4*L), T = 1/f; return { text: `A pipe closed at one end (length ${L} m, sound speed ${v} m/s) vibrates. Calculate: (a) fundamental frequency, (b) time period, (c) verify f×T ≈ 1.`, answer: [f.toFixed(1), T.toFixed(3), (f*T).toFixed(2)], modelAnswer: [`Fundamental frequency ≈ ${f.toFixed(1)} Hz`, `Time period ≈ ${T.toFixed(3)} s`, `f×T ≈ ${(f*T).toFixed(2)}`], multi: true }; }
+        question: function() { const L = 2, v = 305, f = v/(4*L), T = 1/f; return { text: `A pipe closed at one end (length ${L} m, sound speed ${v} m/s) vibrates. Calculate: (a) fundamental frequency, (b) time period, (c) verify f×T ≈ 1.`, answer: [f.toFixed(1), T.toFixed(3), (f*T).toFixed(2)], modelAnswer: [`Fundamental frequency ≈ ${f.toFixed(1)} Hz`, `Time period ≈ ${T.toFixed(3)} s`, `f×T ≈ ${(f*T).toFixed(2)}`], multi:true }; }
       },
       
       // Topic 8: Superposition
@@ -630,7 +616,7 @@
       },
       {
         topic: 9, difficulty: "hard", type: "numeric_multi",
-        question: function() { const R = 10, Vin = 12, I1 = Vin/R, P1 = I1*I1*R, R_series = 10, newTotal = R+R_series, I2 = Vin/newTotal; return { text: `A ${R} Ω resistor is connected to a ${Vin} V battery. Calculate: (a) current, (b) power, (c) new current if a ${R_series} Ω resistor is added.`, answer: [I1.toFixed(2)+" A", P1.toFixed(1)+" W", I2.toFixed(2)+" A"], modelAnswer: [`I ≈ ${I1.toFixed(2)} A`, `P ≈ ${P1.toFixed(1)} W`, `New I ≈ ${I2.toFixed(2)} A`] }; }
+        question: function() { const R = 10, Vin = 12, I1 = Vin/R, P1 = I1*I1*R, R_series = 10, newTotal = R+R_series, I2 = Vin/newTotal; return { text: `A ${R} Ω resistor is connected to a ${Vin} V battery. Calculate: (a) current, (b) power, (c) new current if a ${R_series} Ω resistor is added.`, answer: [I1.toFixed(2)+" A", P1.toFixed(1)+" W", I2.toFixed(2)+" A"], modelAnswer: [`I ≈ ${I1.toFixed(2)} A`, `P ≈ ${P1.toFixed(1)} W`, `New current ≈ ${I2.toFixed(2)} A`] }; }
       },
       
       // Topic 10: D.C. circuits
@@ -664,7 +650,7 @@
       },
       {
         topic: 10, difficulty: "hard", type: "numeric_multi",
-        question: function() { const R1 = 100, R2 = 200, R3 = 300, Vin = 12, R_total = R1+R2+R3, I = Vin/R_total, V_R2 = I*R2, power_R2 = V_R2*V_R2/R2; return { text: `For series resistors ${R1} Ω, ${R2} Ω, ${R3} Ω with ${Vin} V, calculate: (a) voltage across ${R2} Ω and (b) its power dissipation.`, answer: [V_R2.toFixed(2)+" V", power_R2.toFixed(2)+" W"], modelAnswer: [`Voltage ≈ ${V_R2.toFixed(2)} V`, `Power ≈ ${power_R2.toFixed(2)} W`] }; }
+        question: function() { const R1 = 100, R2 = 200, R3 = 300, Vin = 12, R_total = R1+R2+R3, I = Vin/R_total, V_R2 = I*R2, power_R2 = V_R2*V_R2/R2; return { text: `For series resistors ${R1} Ω, ${R2} Ω, ${R3} Ω with ${Vin} V, calculate: (a) voltage across ${R2} Ω and (b) power in it.`, answer: [V_R2.toFixed(2)+" V", power_R2.toFixed(2)+" W"], modelAnswer: [`Voltage ≈ ${V_R2.toFixed(2)} V`, `Power ≈ ${power_R2.toFixed(2)} W`] }; }
       },
       
       // Topic 11: Particle and nuclear physics
@@ -674,11 +660,11 @@
       },
       {
         topic: 11, difficulty: "easy", type: "equation",
-        question: function() { const initialZ = Math.floor(Math.random()*20+10), finalZ = initialZ-1; return { text: `A nucleus with proton number ${initialZ} undergoes β+ decay. New proton number?`, answer: finalZ.toString(), modelAnswer: `Proton number becomes ${finalZ}.` }; }
+        question: function() { const initialZ = Math.floor(Math.random()*20+10), finalZ = initialZ - 1; return { text: `A nucleus with proton number ${initialZ} undergoes β+ decay. New proton number?`, answer: finalZ.toString(), modelAnswer: `Proton number becomes ${finalZ}.` }; }
       },
       {
         topic: 11, difficulty: "easy", type: "equation",
-        question: function() { const initialMass = Math.floor(Math.random()*200+100), finalMass = initialMass-4; return { text: `A nucleus with mass number ${initialMass} undergoes alpha decay. New mass number?`, answer: finalMass.toString(), modelAnswer: `Mass number becomes ${finalMass}.` }; }
+        question: function() { const initialMass = Math.floor(Math.random()*200+100), finalMass = initialMass - 4; return { text: `A nucleus with mass number ${initialMass} undergoes alpha decay. New mass number?`, answer: finalMass.toString(), modelAnswer: `Mass number becomes ${finalMass}.` }; }
       },
       {
         topic: 11, difficulty: "easy", type: "equation",
@@ -780,7 +766,7 @@
       }
     ];
     
-    // Utility: Get selected difficulty
+    // Utility: Get selected difficulty from radio buttons
     function getSelectedDifficulty() {
       const radios = document.getElementsByName("difficulty");
       for (let radio of radios) {
@@ -789,7 +775,7 @@
       return "easy";
     }
     
-    // Mixed mode: 2 easy for every 1 hard.
+    // For mixed mode, select 2 easy for every 1 hard question.
     function getMixedQuestion() {
       if (mixedCount % 3 < 2) {
         return getRandom(questionBank.filter(q => (q.difficulty==="easy" || !q.difficulty) && q.type !== "definition"));
@@ -805,12 +791,13 @@
     const scoreDisplay = document.getElementById("score");
     const diagramContainer = document.getElementById("diagramContainer");
     
-    // Load question into UI
+    // Load a question into the UI
     function loadQuestion(q) {
       answeredCurrent = false;
       currentQuestion = q;
       feedback.innerText = "";
       scoreDisplay.innerText = "Score: " + score;
+      // Use q.text (the built text) for display
       questionBox.innerText = "Question: " + q.text;
       answerInputs.innerHTML = "";
       diagramContainer.innerHTML = "";
@@ -857,7 +844,7 @@
       loadQuestion(getRandom(pool));
     }
     
-    // Check answer (score only once)
+    // Check answer function (prevent multiple scoring)
     function checkAnswer() {
       if (answeredCurrent) return;
       let userAns = "";
@@ -880,14 +867,14 @@
       } else if (currentQuestion.type==="numeric" || currentQuestion.type==="numeric_dynamic") {
         const userNum = parseFloat(userAns);
         const correctNum = parseFloat(currentAnswers[0]);
-        if (!isNaN(userNum) && Math.abs(userNum-correctNum) < Math.max(0.01*Math.abs(correctNum),0.1))
+        if (!isNaN(userNum) && Math.abs(userNum - correctNum) < Math.max(0.01*Math.abs(correctNum), 0.1))
           correct = true;
       } else if (currentQuestion.type==="numeric_multi") {
         correct = true;
         for (let i = 0; i < currentAnswers.length; i++) {
           const userNum = parseFloat(userAns[i]);
           const correctNum = parseFloat(currentAnswers[i]);
-          if (isNaN(userNum) || Math.abs(userNum-correctNum) > Math.max(0.01*Math.abs(correctNum),0.1)) { correct = false; break; }
+          if (isNaN(userNum) || Math.abs(userNum - correctNum) > Math.max(0.01*Math.abs(correctNum), 0.1)) { correct = false; break; }
         }
       }
       
@@ -913,7 +900,7 @@
     document.getElementById("difficulty-im-getting-there").addEventListener("click", function(){ currentMode = "mixed"; mixedCount = 0; score = 0; nextQuestion(); });
     document.getElementById("difficulty-hard").addEventListener("click", function(){ currentMode = "hard"; score = 0; nextQuestion(); });
     
-    // Create answer buttons if not present
+    // Create answer buttons if not already in the DOM
     const checkBtn = document.createElement("button");
     checkBtn.innerText = "Check Answer";
     checkBtn.addEventListener("click", checkAnswer);
@@ -930,14 +917,14 @@
     nextBtn.disabled = false;
     showAnswerBtn.parentNode.insertBefore(nextBtn, showAnswerBtn.nextSibling);
     
-    // Shortcuts to main UI elements
+    // Shortcuts for main UI elements
     const questionBox = document.getElementById("question-box");
     const answerInputs = document.getElementById("answerInputs");
     const feedback = document.getElementById("feedback");
     const scoreDisplay = document.getElementById("score");
     const diagramContainer = document.getElementById("diagramContainer");
     
-    // On load, generate topic checkboxes.
+    // Generate topic checkboxes on load
     generateTopicCheckboxes();
   </script>
 </body>
