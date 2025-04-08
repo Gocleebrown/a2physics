@@ -119,15 +119,53 @@
     }
 
     // Inline SVG for slope questions
-    function createSlopeSVG(mass, angle, distance) {
-      return `
-      <svg width="300" height="200" class="question-img" style="border:1px solid #ccc">
-        <line x1="50" y1="150" x2="200" y2="50" stroke="orange" stroke-width="2" />
-        <rect x="190" y="40" width="20" height="20" fill="brown" />
-        <text x="125" y="100" fill="blue" font-size="12" text-anchor="middle">Distance = ${distance} m</text>
-        <text x="200" y="40" fill="red" font-size="12" text-anchor="start">Mass = ${mass} kg</text>
-        <text x="55" y="140" fill="green" font-size="12" text-anchor="start">Angle = ${angle}°</text>
-      </svg>`;
+  function createSlopeSVG(mass, angle, distance) {
+  const x1 = 50, y1 = 150;
+  const x2 = 200, y2 = 50;
+  
+  // Get slope unit vector
+  const dx = x2 - x1;
+  const dy = y2 - y1;
+  const length = Math.sqrt(dx * dx + dy * dy);
+  const unitX = dx / length;
+  const unitY = dy / length;
+
+  // Distance along the slope where box sits (e.g., halfway)
+  const boxDist = length * 0.5;
+  const boxSize = 20;
+
+  // Compute box's bottom-left corner so it sits on the slope
+  const slopeX = x1 + unitX * boxDist;
+  const slopeY = y1 + unitY * boxDist;
+
+  // Offset upward perpendicular to slope to sit ON the slope, not centred
+  const perpX = -unitY;
+  const perpY = unitX;
+  const offsetX = perpX * boxSize / 2;
+  const offsetY = perpY * boxSize / 2;
+
+  const boxX = slopeX + offsetX - boxSize / 2;
+  const boxY = slopeY + offsetY - boxSize / 2;
+
+  return `
+    <svg width="300" height="200" class="question-img" style="border:1px solid #ccc">
+      <!-- Ground line -->
+      <line x1="0" y1="${y1}" x2="300" y2="${y1}" stroke="black" stroke-width="1" stroke-dasharray="4" />
+
+      <!-- Slope -->
+      <line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="orange" stroke-width="2" />
+
+      <!-- Box sitting on slope (upright) -->
+      <rect x="${boxX}" y="${boxY}" width="${boxSize}" height="${boxSize}" fill="brown" />
+
+      <!-- Labels -->
+      <text x="125" y="100" fill="blue" font-size="12" text-anchor="middle">Distance = ${distance} m</text>
+      <text x="200" y="40" fill="red" font-size="12" text-anchor="start">Mass = ${mass} kg</text>
+      <text x="55" y="140" fill="green" font-size="12" text-anchor="start">Angle = ${angle}°</text>
+    </svg>
+  `;
+}
+
     }
 
     /* -----------------------------
@@ -385,7 +423,7 @@
         topic: 2, difficulty: "easy", type: "definition",
         question: "Define displacement.",
         modelAnswer: "Displacement is the change in position of an object in a specific direction.",
-        keywords: [["displacement", "distance"], ["direction", "oriented"]]
+        keywords: [["displacement", "distance"], ["direction", "oriented"],["straight line", "between two points"]
       },
       {
         topic: 2, difficulty: "easy", type: "definition",
@@ -1331,6 +1369,8 @@
       }
       questionPool = pool;
       askNewQuestion();
+      document.getElementById("question-box").scrollIntoView({ behavior: "smooth" });
+
     }
     
     function askNewQuestion() {
