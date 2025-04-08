@@ -118,66 +118,86 @@
       return arr[Math.floor(Math.random() * arr.length)];
     }
 
-    // Inline SVG for slope questions with ground line and centered block on the slope
+    // Inline SVG for slope questions with ground line and centered box on the slope
     function createSlopeSVG(mass, angle, distance) {
-      const slopeStart = { x: 50, y: 150 };
-      const slopeEnd   = { x: 200, y: 50 };
-      const boxWidth   = 20;
-      const boxHeight  = 20;
+  const slopeStart = { x: 50, y: 150 };
+  const slopeEnd   = { x: 200, y: 50 };
+  const boxWidth   = 20;
+  const boxHeight  = 20;
 
-      // Calculate slope angle in radians
-      const dx = slopeEnd.x - slopeStart.x;
-      const dy = slopeEnd.y - slopeStart.y;
-      const slopeAngle = Math.atan2(dy, dx);             // angle in radians
-      const slopeAngleDeg = slopeAngle * (180 / Math.PI);
+  // Calculate slope angle in radians
+  const dx = slopeEnd.x - slopeStart.x;
+  const dy = slopeEnd.y - slopeStart.y;
+  const slopeAngle = Math.atan2(dy, dx);             // angle in radians
+  const slopeAngleDeg = slopeAngle * (180 / Math.PI);
 
-      // Midpoint of the slope line (where we’ll place and rotate the box)
-      const midX = (slopeStart.x + slopeEnd.x) / 2;
-      const midY = (slopeStart.y + slopeEnd.y) / 2;
+  // Midpoint of the slope line (where we’ll place and rotate the box)
+  const midX = (slopeStart.x + slopeEnd.x) / 2;
+  const midY = (slopeStart.y + slopeEnd.y) / 2;
 
-      // For a dimension line offset, we move some pixels perpendicular to the slope.
-      // A perpendicular vector to (dx, dy) is ( dy, -dx ) or ( -dy, dx ).
-      // We'll choose ( dy, -dx ) for the offset direction.
-      const offsetDistance = 10; // shift for the dimension line
-      const slopeLength = Math.sqrt(dx * dx + dy * dy);
-      // Unit vector perpendicular to the slope:
-      const perpUx =  (dy / slopeLength);
-      const perpUy = -(dx / slopeLength);
-      // Actual offset in x,y
-      const offsetX = offsetDistance * perpUx;
-      const offsetY = offsetDistance * perpUy;
+  // For a dimension line offset, we move some pixels perpendicular to the slope.
+  // A perpendicular vector to (dx, dy) is ( dy, -dx ) or ( -dy, dx ).
+  // We'll choose ( dy, -dx ) for the offset direction.
+  const offsetDistance = 10; // shift for the dimension line
+  const slopeLength = Math.sqrt(dx * dx + dy * dy);
+  // Unit vector perpendicular to the slope:
+  const perpUx =  (dy / slopeLength);
+  const perpUy = -(dx / slopeLength);
+  // Actual offset in x,y
+  const offsetX = offsetDistance * perpUx;
+  const offsetY = offsetDistance * perpUy;
 
-      // We'll place the label near the middle of the dimension line
-      const midDimX = (slopeStart.x + slopeEnd.x) / 2 + offsetX;
-      const midDimY = (slopeStart.y + slopeEnd.y) / 2 + offsetY - 2; // shift label slightly
+  // We'll place the label near the middle of the dimension line
+  const midDimX = (slopeStart.x + slopeEnd.x) / 2 + offsetX;
+  const midDimY = (slopeStart.y + slopeEnd.y) / 2 + offsetY - 2; // shift label slightly
 
-      // Build the entire SVG as a string
-      return `
+  // Build the entire SVG as a string
+  return `
 <svg width="300" height="200" class="question-img" style="border:1px solid #ccc">
+
   <!-- Ground line (dashed, gray) -->
-  <line x1="30" y1="150" x2="270" y2="150" stroke="gray" stroke-dasharray="4" />
+  <line x1="30" y1="150" x2="270" y2="150"
+        stroke="gray" stroke-dasharray="4" />
 
   <!-- Actual slope line (orange) -->
-  <line x1="${slopeStart.x}" y1="${slopeStart.y}" x2="${slopeEnd.x}" y2="${slopeEnd.y}" stroke="orange" stroke-width="2" />
+  <line x1="${slopeStart.x}" y1="${slopeStart.y}"
+        x2="${slopeEnd.x}"   y2="${slopeEnd.y}"
+        stroke="orange" stroke-width="2" />
 
   <!-- Dimension line parallel to slope, offset by 10 px (blue, dashed) -->
-  <line x1="${slopeStart.x + offsetX}" y1="${slopeStart.y + offsetY}" x2="${slopeEnd.x + offsetX}" y2="${slopeEnd.y + offsetY}" stroke="blue" stroke-dasharray="2,2" />
+  <line x1="${slopeStart.x + offsetX}" y1="${slopeStart.y + offsetY}"
+        x2="${slopeEnd.x   + offsetX}" y2="${slopeEnd.y   + offsetY}"
+        stroke="blue" stroke-dasharray="2,2" />
 
   <!-- Distance label in the middle of the dimension line -->
-  <text x="${midDimX}" y="${midDimY}" fill="blue" font-size="12" text-anchor="middle">Distance = ${distance} m</text>
+  <text x="${midDimX}" y="${midDimY}" fill="blue" font-size="12" text-anchor="middle">
+    Distance = ${distance} m
+  </text>
 
   <!-- A group to position and rotate the block so it sits on the slope line -->
   <g transform="translate(${midX}, ${midY}) rotate(${slopeAngleDeg})">
-    <!-- By drawing the rectangle at (0, -boxHeight), its bottom edge is at y=0 (the slope line) -->
+    <!-- 
+      By drawing the rectangle at (0, -boxHeight),
+      we ensure the bottom edge is at y=0 (the slope line),
+      rather than centering the block around y=0.
+    -->
     <rect x="0" y="${-boxHeight}" width="${boxWidth}" height="${boxHeight}" fill="brown" />
   </g>
 
   <!-- Text labels for angle and mass -->
-  <text x="${slopeEnd.x + 5}" y="${slopeEnd.y + 10}" fill="red" font-size="12" text-anchor="start">Mass = ${mass} kg</text>
-  <text x="${slopeStart.x + 5}" y="${slopeStart.y - 10}" fill="green" font-size="12" text-anchor="start">Angle = ${angle}°</text>
+  <!-- Position near the slope endpoints for clarity -->
+  <text x="${slopeEnd.x + 5}" y="${slopeEnd.y + 10}"
+        fill="red" font-size="12" text-anchor="start">
+    Mass = ${mass} kg
+  </text>
+  <text x="${slopeStart.x + 5}" y="${slopeStart.y - 10}"
+        fill="green" font-size="12" text-anchor="start">
+    Angle = ${angle}°
+  </text>
+
 </svg>
-      `;
-    }
+  `;
+}
 
     /* -----------------------------
        Topics & Topic Checkboxes
@@ -261,7 +281,7 @@
           return { 
             text: `A substance has ${mass_g} g and occupies ${volume_cm3} cm³. Calculate its density in kg/m³.`,
             answer: density.toFixed(0),
-            modelAnswer: `Convert ${mass_g} g to ${mass_g/1000} kg and ${volume_cm3} cm³ to ${volume_cm3/1e6} m³. Then, density = mass/volume ≈ ${density.toFixed(0)} kg/m³.`
+            modelAnswer: `Convert ${mass_g} g to ${mass_g/1000} kg and ${volume_cm3} cm³ to ${volume_cm3/1e6} m³. Then density = mass/volume ≈ ${density.toFixed(0)} kg/m³.`
           };
         }
       },
@@ -342,10 +362,10 @@
       {
         topic: 2, difficulty: "easy", type: "equation",
         question: function() {
-          const u = Math.floor(Math.random() * 10 + 5),
-                a = Math.floor(Math.random() * 4 + 1),
-                t = Math.floor(Math.random() * 4 + 2),
-                s = u * t + 0.5 * a * t * t;
+          const u = Math.floor(Math.random()*10+5),
+                a = Math.floor(Math.random()*4+1),
+                t = Math.floor(Math.random()*4+2),
+                s = u*t + 0.5*a*t*t;
           return { 
             text: `A body starts at ${u} m/s and accelerates at ${a} m/s² for ${t} s. Find its displacement.`,
             answer: s.toFixed(1),
@@ -356,11 +376,11 @@
       {
         topic: 2, difficulty: "easy", type: "equation",
         question: function() {
-          const m = Math.floor(Math.random() * 20 + 5),
-                angle = Math.floor(Math.random() * 30 + 10),
-                d = Math.floor(Math.random() * 10 + 2),
+          const m = Math.floor(Math.random()*20+5),
+                angle = Math.floor(Math.random()*30+10),
+                d = Math.floor(Math.random()*10+2),
                 g = 9.8,
-                a = g * Math.sin(angle * Math.PI / 180),
+                a = g * Math.sin(angle * Math.PI/180),
                 v = Math.sqrt(2 * a * d);
           return { 
             text: `A ${m} kg block slides down a ${angle}° frictionless slope for ${d} m. Find its speed at the bottom.`,
@@ -374,7 +394,7 @@
         topic: 2, difficulty: "hard", type: "numeric_multi",
         question: function() {
           const mass = 20, angle = 23, distance = 5, g = 9.8;
-          const a = g * Math.sin(angle * Math.PI / 180);
+          const a = g * Math.sin(angle * Math.PI/180);
           const v = Math.sqrt(2 * a * distance);
           const ke = 0.5 * mass * v * v;
           return { 
@@ -392,10 +412,10 @@
       {
         topic: 2, difficulty: "hard", type: "equation",
         question: function() {
-          const u = Math.floor(Math.random() * 10 + 10),
-                angle = Math.floor(Math.random() * 30 + 30),
+          const u = Math.floor(Math.random()*10+10),
+                angle = Math.floor(Math.random()*30+30),
                 g = 9.8,
-                R = (u * u * Math.sin(2 * angle * Math.PI / 180)) / g;
+                R = (u*u*Math.sin(2*angle*Math.PI/180))/g;
           return { 
             text: `A projectile is launched at ${angle}° with a speed of ${u} m/s. Calculate its horizontal range.`,
             answer: R.toFixed(2),
@@ -406,9 +426,9 @@
       {
         topic: 2, difficulty: "easy", type: "equation",
         question: function() {
-          const h = Math.floor(Math.random() * 20 + 10),
+          const h = Math.floor(Math.random()*20+10),
                 g = 9.8,
-                t = Math.sqrt((2 * h) / g);
+                t = Math.sqrt((2*h)/g);
           return { 
             text: `An object is launched horizontally from a height of ${h} m. Find the time to hit the ground.`,
             answer: t.toFixed(2),
@@ -419,7 +439,7 @@
       {
         topic: 2, difficulty: "easy", type: "equation",
         question: function() {
-          const t = Math.floor(Math.random() * 4 + 2),
+          const t = Math.floor(Math.random()*4+2),
                 g = 9.8,
                 s = 0.5 * g * t * t;
           return { 
@@ -463,28 +483,28 @@
         topic: 2, difficulty: "easy", type: "definition",
         question: "State what the gradient of a velocity–time graph represents.",
         modelAnswer: "The gradient of a velocity–time graph represents the acceleration.",
-        keywords: [["acceleration"]]
+        keywords: [["gradient"], ["acceleration"]]
       },
       {
         topic: 2, difficulty: "easy", type: "definition",
         question: "State what the area under a velocity–time graph represents.",
         modelAnswer: "The area under a velocity–time graph represents the displacement.",
-        keywords: [["displacement"]]
+        keywords: [["area"], ["displacement"]]
       },
       
       // --- Topic 3: Dynamics ---
       {
         topic: 3, difficulty: "easy", type: "equation",
         question: function() {
-          const L = Math.floor(Math.random() * 5 + 1),
-                W = Math.floor(Math.random() * 50 + 20),
-                angle = Math.floor(Math.random() * 30 + 30),
-                radians = angle * Math.PI / 180,
-                T = (W * L / 2) / (L * Math.sin(radians));
+          const L = Math.floor(Math.random()*5+1),
+                W = Math.floor(Math.random()*50+20),
+                angle = Math.floor(Math.random()*30+30),
+                radians = angle * Math.PI/180,
+                T = (W * L/2) / (L * Math.sin(radians));
           return { 
             text: `A beam of length ${L} m and weight ${W} N is supported by a string at ${angle}°. Find the tension in the string.`,
             answer: T.toFixed(1),
-            modelAnswer: `We take moments about the support. The weight creates a moment of W×(L/2) and the tension's effective moment arm is L×sin(${angle}°). Thus, T ≈ ${T.toFixed(1)} N.`
+            modelAnswer: `We take moments about the support. The weight creates a moment of W×(L/2) and the tension's effective moment arm is L×sin(${angle}°). Thus, T = [W×(L/2)]/(L×sin(${angle}°)) ≈ ${T.toFixed(1)} N.`
           };
         }
       },
@@ -496,33 +516,29 @@
           return { 
             text: `A ${m1} kg object moving at ${u1} m/s collides inelastically with a ${m2} kg object at rest. Find the final speed of the combined mass.`,
             answer: vf.toFixed(2),
-            modelAnswer: `Momentum is conserved. Thus, v = (m₁u₁ + m₂u₂)/(m₁+m₂) ≈ ${vf.toFixed(2)} m/s.`
+            modelAnswer: `Momentum is conserved in inelastic collisions. Thus, v = (m₁u₁ + m₂u₂)/(m₁+m₂) = (2×3 + 3×0)/(2+3) ≈ ${vf.toFixed(2)} m/s.`
           };
         }
       },
       {
         topic: 3, difficulty: "easy", type: "equation",
         question: function() {
-          const m = Math.floor(Math.random() * 20 + 5),
-                a = Math.floor(Math.random() * 5 + 1),
-                F = m * a;
+          const m = Math.floor(Math.random()*20+5), a = Math.floor(Math.random()*5+1), F = m * a;
           return { 
             text: `Given a mass of ${m} kg accelerating at ${a} m/s², find the net force acting on it.`,
             answer: F.toFixed(1),
-            modelAnswer: `Using F = m × a, F ≈ ${m} × ${a} ≈ ${F.toFixed(1)} N.`
+            modelAnswer: `Using F = m × a, we have F = ${m} × ${a} ≈ ${F.toFixed(1)} N.`
           };
         }
       },
       {
         topic: 3, difficulty: "easy", type: "equation",
         question: function() {
-          const F_applied = Math.floor(Math.random() * 50 + 50),
-                friction = Math.floor(Math.random() * 20 + 10),
-                netF = F_applied - friction;
+          const F_applied = Math.floor(Math.random()*50+50), friction = Math.floor(Math.random()*20+10), netF = F_applied - friction;
           return { 
             text: `A force of ${F_applied} N is applied while friction of ${friction} N opposes it. Find the net force.`,
             answer: netF.toFixed(1),
-            modelAnswer: `Net force = ${F_applied} N - ${friction} N ≈ ${netF.toFixed(1)} N.`
+            modelAnswer: `Net force is given by the difference: ${F_applied} N - ${friction} N = ${netF.toFixed(1)} N.`
           };
         }
       },
@@ -530,13 +546,13 @@
         topic: 3, difficulty: "hard", type: "numeric_multi",
         question: function() {
           const m1 = 2, m2 = 3,
-                u1 = Math.floor(Math.random() * 10 + 5),
-                u2 = Math.floor(Math.random() * 10),
+                u1 = Math.floor(Math.random()*10+5),
+                u2 = Math.floor(Math.random()*10),
                 v1 = ((m1 - m2) / (m1 + m2)) * u1 + ((2 * m2) / (m1 + m2)) * u2;
           return { 
             text: `In an elastic collision, a ${m1} kg object moving at ${u1} m/s collides with a ${m2} kg object moving at ${u2} m/s. Find the final speed of the ${m1} kg object.`,
             answer: v1.toFixed(2),
-            modelAnswer: `Using v₁ = ((m₁-m₂)/(m₁+m₂))×u₁ + (2×m₂/(m₁+m₂))×u₂, v₁ ≈ ${v1.toFixed(2)} m/s.`
+            modelAnswer: `In elastic collisions, both momentum and kinetic energy are conserved. Using the formula v₁ = ((m₁-m₂)/(m₁+m₂))×u₁ + (2×m₂/(m₁+m₂))×u₂, we obtain v₁ ≈ ${v1.toFixed(2)} m/s.`
           };
         }
       },
@@ -544,20 +560,20 @@
         topic: 3, difficulty: "hard", type: "numeric_multi",
         question: function() {
           const m1 = 2, m2 = 3, v1i = 5, v1f = 3, theta1 = 30;
-          const v1fx = v1f * Math.cos(theta1 * Math.PI / 180);
-          const v1fy = v1f * Math.sin(theta1 * Math.PI / 180);
+          const v1fx = v1f * Math.cos(theta1 * Math.PI/180);
+          const v1fy = v1f * Math.sin(theta1 * Math.PI/180);
           const p_initial_x = m1 * v1i;
           const p1x = m1 * v1fx;
           const v2fx = (p_initial_x - p1x) / m2;
           const v2fy = - (m1 * v1fy) / m2;
-          const v2f = Math.sqrt(v2fx * v2fx + v2fy * v2fy);
-          const theta2 = Math.atan2(v2fy, v2fx) * (180 / Math.PI);
+          const v2f = Math.sqrt(v2fx*v2fx + v2fy*v2fy);
+          const theta2 = Math.atan2(v2fy, v2fx) * (180/Math.PI);
           return { 
             text: `A 2 kg ball at 5 m/s collides with a 3 kg ball at rest. After the collision, the 2 kg ball moves at 3 m/s at 30° above horizontal. Calculate: (a) the speed of the 3 kg ball, (b) its angle (negative if below horizontal).`,
             answer: [v2f.toFixed(2), theta2.toFixed(2)],
             modelAnswer: [
-              `Using conservation of momentum, the 3 kg ball's speed is ≈ ${v2f.toFixed(2)} m/s.`,
-              `The angle is ≈ ${theta2.toFixed(2)}°.`
+              `Using conservation of momentum in the horizontal direction and resolving into components, we find the resultant speed of the 3 kg ball to be approximately ${v2f.toFixed(2)} m/s.`,
+              `The angle is determined by taking the arctan of the vertical over horizontal components, yielding approximately ${theta2.toFixed(2)}°.`
             ]
           };
         }
@@ -571,62 +587,62 @@
       {
         topic: 3, difficulty: "easy", type: "definition",
         question: "State Newton’s Second Law of Motion.",
-        modelAnswer: "Newton's Second Law states that the resultant force acting on an object is proportional to the rate of change of its momentum (p=mv).",
-        keywords: [["rate of change", "change per unit time", "change over time"], ["momentum"]]
+        modelAnswer: "Newton's Second Law states that the acceleration of an object is directly proportional to the net force acting on it and inversely proportional to its mass.",
+        keywords: [["acceleration"], ["net force"], ["mass"]]
       },
       {
         topic: 3, difficulty: "easy", type: "definition",
         question: "State Newton’s Third Law of Motion.",
-        modelAnswer: "Newton's Third Law states that for every action, there is an equal and opposite reaction.",
-        keywords: [["equal"], ["opposite"]]
+        modelAnswer: "Newton's Third Law states that for every action there is an equal and opposite reaction.",
+        keywords: [["equal", "opposite"], ["action", "reaction"]]
       },
       {
         topic: 3, difficulty: "easy", type: "definition",
         question: "Define inertia.",
         modelAnswer: "Inertia is the tendency of an object to resist any change in its state of motion.",
-        keywords: [["tendency", "ability to"], ["resist"], ["change in motion"]]
+        keywords: [["tendency", "inertia"], ["resist", "change", "motion"]]
       },
       
       // --- Topic 4: Forces, density and pressure ---
       {
         topic: 4, difficulty: "easy", type: "equation",
         question: function() {
-          const h = Math.floor(Math.random() * 10 + 5),
+          const h = Math.floor(Math.random()*10+5),
                 rho = 1000, g = 9.8,
                 pressure = rho * g * h;
           return { 
             text: `Calculate the hydrostatic pressure at a depth of ${h} m in water (density 1000 kg/m³).`,
             answer: pressure.toFixed(0),
-            modelAnswer: `Using P = ρgh, with ρ = 1000 kg/m³ and g = 9.8 m/s², P ≈ ${pressure.toFixed(0)} Pa.`
+            modelAnswer: `Using P = ρgh with ρ = 1000 kg/m³, g = 9.8 m/s², and h = ${h} m, we get P ≈ ${pressure.toFixed(0)} Pa.`
           };
         }
       },
       {
         topic: 4, difficulty: "easy", type: "equation",
         question: function() {
-          const V = Math.floor(Math.random() * 100 + 100),
+          const V = Math.floor(Math.random()*100+100),
                 rho = 1000, g = 9.8,
                 V_m3 = V / 1e6,
                 F_b = rho * g * V_m3;
           return { 
             text: `An object displaces ${V} cm³ of water. Calculate the buoyant force acting on it.`,
             answer: F_b.toFixed(2),
-            modelAnswer: `Buoyant force = ρgV. Converting ${V} cm³ to m³ gives V = ${V}/1e6 m³, so F_b ≈ ${F_b.toFixed(2)} N.`
+            modelAnswer: `Buoyant force is given by F_b = ρgV. Converting ${V} cm³ to m³ gives V = ${V}/1e6 m³, so F_b ≈ ${F_b.toFixed(2)} N.`
           };
         }
       },
       {
         topic: 4, difficulty: "easy", type: "equation",
         question: function() {
-          const A = Math.floor(Math.random() * 50 + 50),
-                h = Math.floor(Math.random() * 4 + 2),
+          const A = Math.floor(Math.random()*50+50),
+                h = Math.floor(Math.random()*4+2),
                 rho = 1000, g = 9.8,
                 A_m2 = A / 10000,
                 F = rho * g * h * A_m2;
           return { 
-            text: `A container with a base area of ${A} cm² filled with water to a height of ${h} m. Calculate the force on the base.`,
+            text: `A container with a base area of ${A} cm² is filled with water to a height of ${h} m. Calculate the force on the base.`,
             answer: F.toFixed(1),
-            modelAnswer: `F = ρghA; converting ${A} cm² to m² gives A = ${A}/10000 m², so F ≈ ${F.toFixed(1)} N.`
+            modelAnswer: `Force on the base is F = ρghA. Converting ${A} cm² to m² gives A = ${A}/10000 m². Thus, F ≈ ${F.toFixed(1)} N.`
           };
         }
       },
@@ -634,13 +650,13 @@
         topic: 4, difficulty: "easy", type: "definition",
         question: "Define pressure.",
         modelAnswer: "Pressure is the force exerted per unit area.",
-        keywords: [["force"], ["divided by area", "per unit area", "over unit area"]]
+        keywords: [["force"], ["area", "surface"]]
       },
       {
         topic: 4, difficulty: "easy", type: "definition",
         question: "Define density.",
         modelAnswer: "Density is defined as the mass of a substance per unit volume.",
-        keywords: [["mass"], ["per unit volume", "divided by volume", "over unit volume"]]
+        keywords: [["mass"], ["volume"]]
       },
       {
         topic: 4, difficulty: "hard", type: "numeric_multi",
@@ -654,8 +670,8 @@
             text: `A container with a base area of ${area_cm2} cm² and water height ${height} m. Calculate: (a) the hydrostatic pressure and (b) the extra force required for a 10% increase in pressure.`,
             answer: [pressure.toFixed(0) + " Pa", extraForce.toFixed(2) + " N"],
             modelAnswer: [
-              `Pressure = ρgh ≈ ${pressure.toFixed(0)} Pa.`,
-              `A 10% increase implies extra pressure = 0.1×P, so extra force ≈ ${extraForce.toFixed(2)} N.`
+              `Pressure = ρgh = 1000×9.8×${height} ≈ ${pressure.toFixed(0)} Pa.`,
+              `A 10% increase means an extra pressure of 0.1×P. The extra force is this extra pressure multiplied by the area: extra force ≈ ${extraForce.toFixed(2)} N.`
             ]
           };
         }
@@ -665,53 +681,53 @@
       {
         topic: 5, difficulty: "easy", type: "equation",
         question: function() {
-          const m = Math.floor(Math.random() * 10 + 1),
-                v = Math.floor(Math.random() * 10 + 1),
+          const m = Math.floor(Math.random()*10+1),
+                v = Math.floor(Math.random()*10+1),
                 KE = 0.5 * m * v * v;
           return { 
             text: `Calculate the kinetic energy of a ${m} kg object moving at ${v} m/s.`,
             answer: KE.toFixed(1),
-            modelAnswer: `KE = ½mv² ≈ ${KE.toFixed(1)} J.`
+            modelAnswer: `Kinetic energy is given by KE = ½mv². Substituting m = ${m} kg and v = ${v} m/s, KE ≈ ${KE.toFixed(1)} J.`
           };
         }
       },
       {
         topic: 5, difficulty: "easy", type: "equation",
         question: function() {
-          const m = Math.floor(Math.random() * 10 + 1),
-                h = Math.floor(Math.random() * 10 + 1),
+          const m = Math.floor(Math.random()*10+1),
+                h = Math.floor(Math.random()*10+1),
                 g = 9.8,
                 GPE = m * g * h;
           return { 
             text: `A ${m} kg object is raised ${h} m. Calculate its gravitational potential energy.`,
             answer: GPE.toFixed(1),
-            modelAnswer: `GPE = mgh ≈ ${GPE.toFixed(1)} J.`
+            modelAnswer: `Gravitational potential energy is given by GPE = mgh. Therefore, GPE = ${m}×9.8×${h} ≈ ${GPE.toFixed(1)} J.`
           };
         }
       },
       {
         topic: 5, difficulty: "easy", type: "equation",
         question: function() {
-          const W = Math.floor(Math.random() * 200 + 100),
-                t = Math.floor(Math.random() * 10 + 1),
+          const W = Math.floor(Math.random()*200+100),
+                t = Math.floor(Math.random()*10+1),
                 P = W / t;
           return { 
             text: `If ${W} J of work is done in ${t} s, calculate the power output.`,
             answer: P.toFixed(1),
-            modelAnswer: `Power = Work / Time ≈ ${P.toFixed(1)} W.`
+            modelAnswer: `Power = Work / Time = ${W} J / ${t} s ≈ ${P.toFixed(1)} W.`
           };
         }
       },
       {
         topic: 5, difficulty: "easy", type: "equation",
         question: function() {
-          const F = Math.floor(Math.random() * 50 + 50),
-                d = Math.floor(Math.random() * 10 + 5),
+          const F = Math.floor(Math.random()*50+50),
+                d = Math.floor(Math.random()*10+5),
                 work = F * d;
           return { 
             text: `A force of ${F} N moves an object through ${d} m. Calculate the work done.`,
             answer: work.toFixed(1),
-            modelAnswer: `Work = Force × Distance ≈ ${work.toFixed(1)} J.`
+            modelAnswer: `Work = Force × Distance = ${F} N × ${d} m = ${work.toFixed(1)} J.`
           };
         }
       },
@@ -720,6 +736,12 @@
         question: "State what is meant by the work done by a force.",
         modelAnswer: "Work is done when a force causes an object to move in the direction of the force.",
         keywords: [["force"], ["move", "displacement", "movement"], ["direction"]]
+      },
+      {
+        topic: 5, difficulty: "easy", type: "definition",
+        question: "Define kinetic energy.",
+        modelAnswer: "Kinetic energy is the energy an object possesses due to its motion, calculated by ½ × mass × velocity².",
+        keywords: [["kinetic", "motion"], ["half", "½"], ["mass"], ["velocity", "speed", "squared"]]
       },
       {
         topic: 5, difficulty: "easy", type: "definition",
@@ -748,7 +770,7 @@
       {
         topic: 5, difficulty: "easy", type: "definition",
         question: "Use the definition of pressure (P = F/A) to determine its SI base units.",
-        modelAnswer: "Pressure is force per unit area, so its SI base units are kg/(m·s²), also called pascals (Pa).",
+        modelAnswer: "Pressure is force per unit area, so its SI base units are kg/(m·s²), which are also called pascals (Pa).",
         keywords: [["kg"], ["m"], ["s^-2", "s-2", "per s2", "per s^2"]]
       },
       {
@@ -760,7 +782,7 @@
       {
         topic: 5, difficulty: "easy", type: "definition",
         question: "Use the definition of strain to determine its SI base units.",
-        modelAnswer: "Strain is a ratio of lengths and is therefore dimensionless.",
+        modelAnswer: "Strain is a ratio of lengths and is therefore dimensionless (it has no units).",
         keywords: [["dimensionless"], ["no units"]]
       },
       {
@@ -771,11 +793,11 @@
           const V_LDR = Vin - V_fixed;
           const R_LDR = V_LDR / I;
           return { 
-            text: `A ${Vin} V battery (negligible internal resistance) is connected in series with an LDR and a ${R_fixed} Ω resistor. A voltmeter reads ${V_fixed} V across the fixed resistor. Calculate: (a) the current and (b) the resistance of the LDR.`,
+            text: `A ${Vin} V battery (negligible internal resistance) is connected in series with an LDR and a ${R_fixed} Ω resistor. A voltmeter across the fixed resistor reads ${V_fixed} V. Calculate: (a) the current and (b) the resistance of the LDR.`,
             answer: [I.toFixed(3) + " A", R_LDR.toFixed(0) + " Ω"],
             modelAnswer: [
-              `Using Ohm's law, I = V_fixed / R_fixed ≈ ${I.toFixed(3)} A.`,
-              `Thus, R_LDR ≈ ${R_LDR.toFixed(0)} Ω.`
+              `Using Ohm's law on the fixed resistor: I = V_fixed / R_fixed = ${V_fixed} V / ${R_fixed} Ω ≈ ${I.toFixed(3)} A.`,
+              `The voltage across the LDR is Vin - V_fixed. Therefore, its resistance is R_LDR = (Vin - V_fixed) / I ≈ ${R_LDR.toFixed(0)} Ω.`
             ]
           };
         }
@@ -785,39 +807,39 @@
       {
         topic: 6, difficulty: "easy", type: "equation",
         question: function() {
-          const stress = Math.floor(Math.random() * 10 + 5),
-                strain = Math.random() * 0.01 + 0.001,
+          const stress = Math.floor(Math.random()*10+5),
+                strain = Math.random()*0.01+0.001,
                 E = stress / strain;
           return { 
             text: `A material has a stress of ${stress} MPa and a strain of ${strain.toFixed(4)}. Calculate its Young's modulus in GPa.`,
-            answer: (E / 1000).toFixed(2),
-            modelAnswer: `Young's modulus E = stress / strain. Here, E ≈ ${(E).toFixed(2)} MPa, which is ≈ ${(E / 1000).toFixed(2)} GPa.`
+            answer: (E/1000).toFixed(2),
+            modelAnswer: `Young's modulus E = stress/strain. Here, E = ${stress} MPa / ${strain.toFixed(4)} ≈ ${(E).toFixed(2)} MPa, which is ${(E/1000).toFixed(2)} GPa.`
           };
         }
       },
       {
         topic: 6, difficulty: "easy", type: "equation",
         question: function() {
-          const k = Math.floor(Math.random() * 200 + 100),
-                F = Math.floor(Math.random() * 50 + 10),
+          const k = Math.floor(Math.random()*200+100),
+                F = Math.floor(Math.random()*50+10),
                 extension = F / k;
           return { 
-            text: `A spring with constant ${k} N/m is pulled by a force of ${F} N. Calculate its extension.`,
+            text: `A spring with a constant of ${k} N/m is pulled by a force of ${F} N. Calculate its extension.`,
             answer: extension.toFixed(3),
-            modelAnswer: `By Hooke's law, extension = F / k ≈ ${extension.toFixed(3)} m.`
+            modelAnswer: `Hooke's Law states that extension = F/k. Therefore, extension = ${F} N / ${k} N/m ≈ ${extension.toFixed(3)} m.`
           };
         }
       },
       {
         topic: 6, difficulty: "easy", type: "equation",
         question: function() {
-          const L0 = Math.floor(Math.random() * 50 + 50),
-                ext = (Math.floor(Math.random() * 5 + 1)) / 100,
+          const L0 = Math.floor(Math.random()*50+50),
+                ext = (Math.floor(Math.random()*5+1)) / 100,
                 strain = ext / (L0 / 100);
           return { 
-            text: `A rod of length ${L0} cm is extended by ${ext.toFixed(2)} m. Calculate the strain.`,
+            text: `A rod of original length ${L0} cm is extended by ${ext.toFixed(2)} m. Calculate the strain.`,
             answer: strain.toFixed(3),
-            modelAnswer: `Strain = extension / original length; converting ${L0} cm to ${L0/100} m gives strain ≈ ${strain.toFixed(3)}.`
+            modelAnswer: `Strain = extension/original length. Convert ${L0} cm to ${L0/100} m, so strain = ${ext.toFixed(2)} / (${L0/100}) ≈ ${strain.toFixed(3)} (dimensionless).`
           };
         }
       },
@@ -831,7 +853,7 @@
         topic: 6, difficulty: "easy", type: "definition",
         question: "Define stress.",
         modelAnswer: "Stress is the force applied per unit cross-sectional area of a material.",
-        keywords: [["force"], ["per unit cross-sectional area", "per unit area", "divided by area", "divided by cross-sectional area"]]
+        keywords: [["force"], ["cross-sectional area", "area"]]
       },
       {
         topic: 6, difficulty: "easy", type: "definition",
@@ -847,12 +869,12 @@
           const strain = stress / E;
           const elongation = length * strain;
           return { 
-            text: `A rod of length ${length} m and area ${area} m² is subjected to a force of ${force} N. With E = ${E/1e9} GPa, calculate: (a) the stress in Pa, (b) the strain, and (c) the elongation in m.`,
+            text: `A rod of length ${length} m and area ${area} m² is subjected to a force of ${force} N. With Young's modulus E = ${E/1e9} GPa, calculate: (a) the stress in Pa, (b) the strain, and (c) the elongation in m.`,
             answer: [stress.toExponential(2) + " Pa", strain.toExponential(2), elongation.toExponential(2) + " m"],
             modelAnswer: [
-              `Stress ≈ ${stress.toExponential(2)} Pa.`,
-              `Strain ≈ ${strain.toExponential(2)}.`,
-              `Elongation ≈ ${elongation.toExponential(2)} m.`
+              `Stress = force / area = ${force} N / ${area} m² ≈ ${stress.toExponential(2)} Pa.`,
+              `Strain = stress / E = ${stress.toExponential(2)} / ${E} ≈ ${strain.toExponential(2)} (dimensionless).`,
+              `Elongation = original length × strain = ${length} m × ${strain.toExponential(2)} ≈ ${elongation.toExponential(2)} m.`
             ]
           };
         }
@@ -862,42 +884,42 @@
       {
         topic: 7, difficulty: "easy", type: "equation",
         question: function() {
-          const n = Math.floor(Math.random() * 3 + 1),
-                L = Math.floor(Math.random() * 3 + 1),
-                v = Math.floor(Math.random() * 200 + 100),
+          const n = Math.floor(Math.random()*3+1),
+                L = Math.floor(Math.random()*3+1),
+                v = Math.floor(Math.random()*200+100),
                 f = (n * v) / (2 * L);
           return { 
             text: `A pipe closed at both ends with length ${L} m and wave speed ${v} m/s vibrates in its ${ordinalSuffix(n)} harmonic. Find its frequency.`,
             answer: f.toFixed(1),
-            modelAnswer: `Frequency f = n×v/(2L) ≈ ${f.toFixed(1)} Hz.`
+            modelAnswer: `For a pipe closed at both ends, frequency f = n×v/(2L). Substituting the values gives f ≈ ${f.toFixed(1)} Hz.`
           };
         }
       },
       {
         topic: 7, difficulty: "easy", type: "equation",
         question: function() {
-          const d = (Math.floor(Math.random() * 4 + 1)) / 1000,
-                D = Math.floor(Math.random() * 100 + 100),
-                x = (Math.floor(Math.random() * 20 + 10)) / 1000,
+          const d = (Math.floor(Math.random()*4+1)) / 1000,
+                D = Math.floor(Math.random()*100+100),
+                x = (Math.floor(Math.random()*20+10)) / 1000,
                 lambda = (d * x) / (D / 100);
           return { 
-            text: `In a double-slit experiment with slit separation ${(d*1000).toFixed(1)} mm, screen distance ${D} cm, and fringe spacing ${(x*1000).toFixed(1)} mm, calculate the wavelength in nm.`,
+            text: `In a double-slit experiment with a slit separation of ${(d*1000).toFixed(1)} mm, screen distance ${D} cm, and fringe spacing ${(x*1000).toFixed(1)} mm, calculate the wavelength in nm.`,
             answer: (lambda * 1e9).toFixed(1),
-            modelAnswer: `Wavelength λ ≈ ${(lambda*1e9).toFixed(1)} nm.`
+            modelAnswer: `Using λ = (d×x)/(D/100), substituting the values gives λ ≈ ${(lambda*1e9).toFixed(1)} nm.`
           };
         }
       },
       {
         topic: 7, difficulty: "easy", type: "equation",
         question: function() {
-          const L = Math.floor(Math.random() * 3 + 1),
-                v = Math.floor(Math.random() * 100 + 300),
+          const L = Math.floor(Math.random()*3+1),
+                v = Math.floor(Math.random()*100+300),
                 f = v / (2 * L),
                 T = 1 / f;
           return { 
             text: `A pipe open at both ends with length ${L} m and sound speed ${v} m/s vibrates. (a) Find the fundamental frequency and (b) the time period.`,
             answer: [f.toFixed(1), T.toFixed(3)],
-            modelAnswer: `Fundamental frequency f = v/(2L) ≈ ${f.toFixed(1)} Hz, and time period T = 1/f ≈ ${T.toFixed(3)} s.`,
+            modelAnswer: `For a pipe open at both ends, the fundamental frequency is f = v/(2L). Thus, f = ${v}/(2×${L}) ≈ ${f.toFixed(1)} Hz, and the period T = 1/f ≈ ${T.toFixed(3)} s.`,
             type:"numeric_multi",
             multi:true
           };
@@ -907,7 +929,7 @@
         topic: 7, difficulty: "easy", type: "definition",
         question: "Define wavelength.",
         modelAnswer: "Wavelength is the distance between successive points on a wave that are in phase.",
-        keywords: [["distance"], ["successive"], ["in phase", "phase"]]
+        keywords: [["distance"], ["successive", "between successive"], ["in phase", "phase"]]
       },
       {
         topic: 7, difficulty: "easy", type: "definition",
@@ -924,14 +946,14 @@
       {
         topic: 7, difficulty: "hard", type: "numeric_multi",
         question: function() {
-          const L = 2, v = 305, f = v / (4 * L), T = 1 / f;
+          const L = 2, v = 305, f = v/(4 * L), T = 1 / f;
           return { 
             text: `A pipe closed at one end with length ${L} m and sound speed ${v} m/s vibrates. Calculate: (a) the fundamental frequency, (b) the time period, and (c) verify that f×T ≈ 1.`,
-            answer: [f.toFixed(1), T.toFixed(3), (f * T).toFixed(2)],
+            answer: [f.toFixed(1), T.toFixed(3), (f*T).toFixed(2)],
             modelAnswer: [
-              `Fundamental frequency f ≈ ${f.toFixed(1)} Hz.`,
-              `Time period T ≈ ${T.toFixed(3)} s.`,
-              `f×T ≈ ${(f * T).toFixed(2)}, which is approximately 1.`
+              `For a pipe closed at one end, the fundamental frequency is f = v/(4L). Substituting gives f ≈ ${f.toFixed(1)} Hz.`,
+              `The time period is T = 1/f ≈ ${T.toFixed(3)} s.`,
+              `Multiplying f and T, we get f×T ≈ ${(f*T).toFixed(2)}, which should be approximately 1.`
             ],
             multi:true
           };
@@ -942,26 +964,26 @@
       {
         topic: 8, difficulty: "easy", type: "equation",
         question: function() {
-          const A1 = Math.floor(Math.random() * 5 + 5),
-                A2 = Math.floor(Math.random() * 5 + 5),
+          const A1 = Math.floor(Math.random()*5+5),
+                A2 = Math.floor(Math.random()*5+5),
                 result = A1 + A2;
           return { 
             text: `Two waves with amplitudes ${A1} and ${A2} add constructively. Find the resultant amplitude.`,
             answer: result.toFixed(1),
-            modelAnswer: `Resultant amplitude = ${A1} + ${A2} = ${result}.`
+            modelAnswer: `In constructive interference, amplitudes add: ${A1} + ${A2} = ${result}.`
           };
         }
       },
       {
         topic: 8, difficulty: "easy", type: "equation",
         question: function() {
-          const A1 = Math.floor(Math.random() * 5 + 5),
-                A2 = Math.floor(Math.random() * 5 + 1),
+          const A1 = Math.floor(Math.random()*5+5),
+                A2 = Math.floor(Math.random()*5+1),
                 result = Math.abs(A1 - A2);
           return { 
             text: `Two waves with amplitudes ${A1} and ${A2} combine destructively. Find the resultant amplitude.`,
             answer: result.toFixed(1),
-            modelAnswer: `Resultant amplitude = |${A1} - ${A2}| = ${result}.`
+            modelAnswer: `In destructive interference, the resultant amplitude is the absolute difference: |${A1} - ${A2}| = ${result}.`
           };
         }
       },
@@ -970,12 +992,6 @@
         question: "State the principle of superposition.",
         modelAnswer: "The principle of superposition states that when waves overlap, the resultant displacement is the sum of the individual displacements.",
         keywords: [["sum", "total"], ["displacement", "overlap"]]
-      },
-      {
-        topic: 8, difficulty: "easy", type: "definition",
-        question: "Define diffraction.",
-        modelAnswer: "Diffraction is the spreading out of waves when they pass through a gap or around an obstacle.",
-        keywords: [["spreading out", "bending"], ["through a gap", "obstacle"]]
       },
       {
         topic: 8, difficulty: "easy", type: "definition",
@@ -994,41 +1010,41 @@
       {
         topic: 9, difficulty: "easy", type: "equation",
         question: function() {
-          const I = Math.floor(Math.random() * 5 + 1),
-                R = Math.floor(Math.random() * 20 + 10),
+          const I = Math.floor(Math.random()*5+1),
+                R = Math.floor(Math.random()*20+10),
                 V = I * R;
           return { 
             text: `A current of ${I} A flows through a ${R} Ω resistor. Find the voltage across it.`,
             answer: V.toFixed(1),
-            modelAnswer: `By Ohm's law, V ≈ ${I} × ${R} ≈ ${V.toFixed(1)} V.`
+            modelAnswer: `Using Ohm's law (V = I×R), V = ${I}×${R} ≈ ${V.toFixed(1)} V.`
           };
         }
       },
       {
         topic: 9, difficulty: "easy", type: "equation",
         question: function() {
-          const V = Math.floor(Math.random() * 20 + 10),
-                I = Math.floor(Math.random() * 5 + 1),
+          const V = Math.floor(Math.random()*20+10),
+                I = Math.floor(Math.random()*5+1),
                 P = V * I;
           return { 
-            text: `Find the power for a circuit with ${V} V and ${I} A.`,
+            text: `Find the power for a circuit with a voltage of ${V} V and a current of ${I} A.`,
             answer: P.toFixed(1),
-            modelAnswer: `Power ≈ ${V} × ${I} ≈ ${P.toFixed(1)} W.`
+            modelAnswer: `Power P = V × I = ${V} × ${I} ≈ ${P.toFixed(1)} W.`
           };
         }
       },
       {
         topic: 9, difficulty: "easy", type: "equation",
         question: function() {
-          const R1 = Math.floor(Math.random() * 20 + 10),
-                R2 = Math.floor(Math.random() * 20 + 10),
-                R3 = Math.floor(Math.random() * 20 + 10),
-                Rp = 1 / (1 / R1 + 1 / R2),
+          const R1 = Math.floor(Math.random()*20+10),
+                R2 = Math.floor(Math.random()*20+10),
+                R3 = Math.floor(Math.random()*20+10),
+                Rp = 1/(1/R1+1/R2),
                 R_total = Rp + R3;
           return { 
-            text: `Calculate total resistance of two resistors (${R1} Ω & ${R2} Ω) in parallel, in series with ${R3} Ω.`,
+            text: `Calculate the total resistance of two resistors (${R1} Ω and ${R2} Ω) in parallel, in series with a ${R3} Ω resistor.`,
             answer: R_total.toFixed(1),
-            modelAnswer: `R_parallel ≈ ${Rp.toFixed(1)} Ω; total resistance ≈ ${Rp.toFixed(1)} + ${R3} = ${R_total.toFixed(1)} Ω.`
+            modelAnswer: `For resistors in parallel, R_parallel = 1/(1/${R1} + 1/${R2}) ≈ ${Rp.toFixed(1)} Ω. Adding the series resistor gives R_total ≈ ${Rp.toFixed(1)} + ${R3} = ${R_total.toFixed(1)} Ω.`
           };
         }
       },
@@ -1041,7 +1057,7 @@
       {
         topic: 9, difficulty: "easy", type: "definition",
         question: "Define electromotive force (e.m.f.).",
-        modelAnswer: "Electromotive force is the energy provided per unit charge by a source, measured in volts.",
+        modelAnswer: "Electromotive force (e.m.f.) is the energy provided per unit charge by a source, measured in volts.",
         keywords: [["work done"], ["per unit charge"]]
       },
       {
@@ -1056,12 +1072,12 @@
           const R = 10, Vin = 12, I1 = Vin / R, P1 = I1 * I1 * R,
                 R_series = 10, newTotal = R + R_series, I2 = Vin / newTotal;
           return { 
-            text: `A ${R} Ω resistor is connected to a ${Vin} V battery. Calculate: (a) current, (b) power, and (c) new current if a ${R_series} Ω is added.`,
+            text: `A resistor of ${R} Ω is connected to a ${Vin} V battery. Calculate: (a) the current, (b) the power, and (c) the new current if a ${R_series} Ω resistor is added in series.`,
             answer: [I1.toFixed(2) + " A", P1.toFixed(1) + " W", I2.toFixed(2) + " A"],
             modelAnswer: [
-              `Current I ≈ ${I1.toFixed(2)} A.`,
-              `Power ≈ ${P1.toFixed(1)} W.`,
-              `New current I ≈ ${I2.toFixed(2)} A.`
+              `Using Ohm's law, current I = V / R = ${Vin} / ${R} ≈ ${I1.toFixed(2)} A.`,
+              `Power is P = I² × R = (${I1.toFixed(2)})² × ${R} ≈ ${P1.toFixed(1)} W.`,
+              `After adding a resistor, total resistance = ${R} + ${R_series} = ${newTotal} Ω, so new current I = ${Vin} / ${newTotal} ≈ ${I2.toFixed(2)} A.`
             ]
           };
         }
@@ -1071,54 +1087,54 @@
       {
         topic: 10, difficulty: "easy", type: "equation",
         question: function() {
-          const R1 = Math.floor(Math.random() * 50 + 50),
-                R2 = Math.floor(Math.random() * 50 + 50),
-                Vin = Math.floor(Math.random() * 20 + 10),
+          const R1 = Math.floor(Math.random()*50+50),
+                R2 = Math.floor(Math.random()*50+50),
+                Vin = Math.floor(Math.random()*20+10),
                 Vout = Vin * (R2 / (R1 + R2));
           return { 
-            text: `In a voltage divider with ${R1} Ω and ${R2} Ω, with input ${Vin} V, find the voltage across the ${R2} Ω resistor.`,
+            text: `In a voltage divider with resistors of ${R1} Ω and ${R2} Ω and an input voltage of ${Vin} V, find the voltage across the ${R2} Ω resistor.`,
             answer: Vout.toFixed(1),
-            modelAnswer: `V_out ≈ ${Vout.toFixed(1)} V.`
+            modelAnswer: `Using the voltage divider formula, V_out = Vin × (R2/(R1+R2)). Substituting, V_out ≈ ${Vout.toFixed(1)} V.`
           };
         }
       },
       {
         topic: 10, difficulty: "easy", type: "equation",
         question: function() {
-          const Vin = Math.floor(Math.random() * 20 + 10),
-                R_total = Math.floor(Math.random() * 100 + 100),
+          const Vin = Math.floor(Math.random()*20+10),
+                R_total = Math.floor(Math.random()*100+100),
                 I = Vin / R_total;
           return { 
-            text: `Find the current in a series circuit with ${R_total} Ω and ${Vin} V.`,
+            text: `Find the current in a series circuit with a total resistance of ${R_total} Ω and a supply voltage of ${Vin} V.`,
             answer: I.toFixed(2),
-            modelAnswer: `Current I ≈ ${I.toFixed(2)} A.`
+            modelAnswer: `Using I = V / R, with V = ${Vin} V and R = ${R_total} Ω, I ≈ ${I.toFixed(2)} A.`
           };
         }
       },
       {
         topic: 10, difficulty: "easy", type: "equation",
         question: function() {
-          const I = Math.floor(Math.random() * 5 + 1),
-                R = Math.floor(Math.random() * 100 + 50),
+          const I = Math.floor(Math.random()*5+1),
+                R = Math.floor(Math.random()*100+50),
                 P = I * I * R;
           return { 
-            text: `Calculate the power dissipated in a ${R} Ω resistor with ${I} A current.`,
+            text: `Calculate the power dissipated in a ${R} Ω resistor with a current of ${I} A.`,
             answer: P.toFixed(1),
-            modelAnswer: `Power ≈ ${P.toFixed(1)} W.`
+            modelAnswer: `Power is given by P = I² × R. So, P = (${I})² × ${R} ≈ ${P.toFixed(1)} W.`
           };
         }
       },
       {
         topic: 10, difficulty: "easy", type: "equation",
         question: function() {
-          const R1 = Math.floor(Math.random() * 50 + 50),
-                R2 = Math.floor(Math.random() * 50 + 50),
-                R3 = Math.floor(Math.random() * 50 + 50),
+          const R1 = Math.floor(Math.random()*50+50),
+                R2 = Math.floor(Math.random()*50+50),
+                R3 = Math.floor(Math.random()*50+50),
                 R_total = R1 + R2 + R3;
           return { 
-            text: `Three resistors (${R1} Ω, ${R2} Ω, ${R3} Ω) in series: Find total resistance.`,
+            text: `Three resistors of ${R1} Ω, ${R2} Ω, and ${R3} Ω are connected in series. Find the total resistance.`,
             answer: R_total.toFixed(1),
-            modelAnswer: `Total resistance = ${R1} + ${R2} + ${R3} = ${R_total} Ω.`
+            modelAnswer: `For series resistors, the total resistance is the sum: R_total = ${R1} + ${R2} + ${R3} = ${R_total} Ω.`
           };
         }
       },
@@ -1143,11 +1159,11 @@
                 V_R2 = I * R2,
                 power_R2 = V_R2 * V_R2 / R2;
           return { 
-            text: `In a voltage divider with resistors (${R1} Ω, ${R2} Ω, ${R3} Ω) and ${Vin} V, calculate: (a) voltage across the ${R2} Ω resistor and (b) its power.`,
+            text: `In a voltage divider with three series resistors (${R1} Ω, ${R2} Ω, ${R3} Ω) and an input voltage of ${Vin} V, calculate: (a) the voltage across the ${R2} Ω resistor and (b) the power dissipated in it.`,
             answer: [V_R2.toFixed(2) + " V", power_R2.toFixed(2) + " W"],
             modelAnswer: [
-              `Voltage ≈ ${V_R2.toFixed(2)} V.`,
-              `Power ≈ ${power_R2.toFixed(2)} W.`
+              `Using the voltage divider rule, V_R2 = Vin × (R2/(R1+R2+R3)) = ${Vin} × (${R2}/(${R1}+${R2}+${R3})) ≈ ${V_R2.toFixed(2)} V.`,
+              `Then, power P = V_R2² / R2 = (${V_R2.toFixed(2)})² / ${R2} ≈ ${power_R2.toFixed(2)} W.`
             ]
           };
         }
@@ -1157,47 +1173,47 @@
       {
         topic: 11, difficulty: "easy", type: "equation",
         question: function() {
-          const initialN = Math.floor(Math.random() * 50 + 50);
+          const initialN = Math.floor(Math.random()*50+50);
           return { 
             text: `In β– decay, if a nucleus has a nucleon number of ${initialN}, what is its nucleon number after decay?`,
             answer: initialN.toString(),
-            modelAnswer: `Nucleon number remains ${initialN}.`
+            modelAnswer: `Nucleon number is conserved in β– decay. Therefore, it remains ${initialN}.`
           };
         }
       },
       {
         topic: 11, difficulty: "easy", type: "equation",
         question: function() {
-          const initialZ = Math.floor(Math.random() * 20 + 10),
+          const initialZ = Math.floor(Math.random()*20+10),
                 finalZ = initialZ - 1;
           return { 
-            text: `A nucleus with proton number ${initialZ} undergoes β+ decay. What is its new proton number?`,
+            text: `A nucleus with a proton number of ${initialZ} undergoes β+ decay. What is its new proton number?`,
             answer: finalZ.toString(),
-            modelAnswer: `New proton number is ${finalZ}.`
+            modelAnswer: `In β+ decay, one proton is converted, so the new proton number is ${initialZ} - 1 = ${finalZ}.`
           };
         }
       },
       {
         topic: 11, difficulty: "easy", type: "equation",
         question: function() {
-          const initialMass = Math.floor(Math.random() * 200 + 100),
+          const initialMass = Math.floor(Math.random()*200+100),
                 finalMass = initialMass - 4;
           return { 
-            text: `A nucleus with mass number ${initialMass} undergoes alpha decay. What is its new mass number?`,
+            text: `A nucleus with a mass number of ${initialMass} undergoes alpha decay. What is its new mass number?`,
             answer: finalMass.toString(),
-            modelAnswer: `New mass number is ${finalMass}.`
+            modelAnswer: `Alpha decay reduces the mass number by 4, so the new mass number is ${initialMass} - 4 = ${finalMass}.`
           };
         }
       },
       {
         topic: 11, difficulty: "easy", type: "equation",
         question: function() {
-          const initialMass = Math.floor(Math.random() * 200 + 100),
+          const initialMass = Math.floor(Math.random()*200+100),
                 change = 4;
           return { 
-            text: `A nucleus with mass number ${initialMass} undergoes alpha decay. By how much does its mass number change?`,
+            text: `A nucleus with a mass number of ${initialMass} undergoes alpha decay. By how much does its mass number change?`,
             answer: change.toString(),
-            modelAnswer: `The mass number decreases by 4.`
+            modelAnswer: `Alpha decay causes a decrease of 4 in the mass number.`
           };
         }
       },
@@ -1210,20 +1226,20 @@
       {
         topic: 11, difficulty: "easy", type: "definition",
         question: "Define proton number.",
-        modelAnswer: "Proton number is the number of protons in a nucleus.",
+        modelAnswer: "Proton number is the count of protons in a nucleus.",
         keywords: [["proton", "number"]]
       },
       {
         topic: 11, difficulty: "easy", type: "definition",
         question: "Define isotope.",
         modelAnswer: "Isotopes are atoms of the same element with the same number of protons but different numbers of neutrons.",
-        keywords: [["same element"], ["same protons"], ["different neutrons"]]
+        keywords: [["same element"], ["protons"], ["different neutrons"]]
       },
       {
         topic: 11, difficulty: "easy", type: "definition",
         question: "Define a hadron.",
         modelAnswer: "A hadron is a composite particle made of quarks that interacts via the strong nuclear force.",
-        keywords: [["quarks"], ["strong force"]]
+        keywords: [["quarks", "3 quarks", "three quarks"], ["strong force"]]
       },
       {
         topic: 11, difficulty: "easy", type: "definition",
@@ -1252,20 +1268,20 @@
       {
         topic: 11, difficulty: "easy", type: "definition",
         question: "State the charges of up and down quarks.",
-        modelAnswer: "The up quark has a charge of +2/3 e, and the down quark has a charge of -1/3 e.",
+        modelAnswer: "The up quark has a charge of +2/3 e, while the down quark has a charge of -1/3 e.",
         keywords: [[ "+2/3", "2/3" ], [ "-1/3", "1/3" ]]
       },
       {
         topic: 11, difficulty: "easy", type: "definition",
         question: "State the quark composition of a proton.",
         modelAnswer: "A proton is composed of two up quarks and one down quark (uud).",
-        keywords: [["2 up", "two up", "1 down", "uud"]]
+        keywords: [[ "2 u", "2 up", "two up", "1 d", "1 down", "uud", "2u1d", "2 up 1 down", "duu", "udu" ]]
       },
       {
         topic: 11, difficulty: "easy", type: "definition",
         question: "State the quark composition of a neutron.",
         modelAnswer: "A neutron is composed of one up quark and two down quarks (udd).",
-        keywords: [["udd", "1 up, 2 down"]]
+        keywords: [[ "1 u", "one up", "2 d", "two down", "udd", "1up2down", "dud", "ddu" ]]
       },
       {
         topic: 11, difficulty: "easy", type: "definition",
@@ -1297,7 +1313,7 @@
           return { 
             text: "A nucleus with mass number 210 and atomic number 84 undergoes β– decay followed by alpha decay. Calculate the final mass number and atomic number.",
             answer: ["206", "83"],
-            modelAnswer: ["After β– decay, the nucleon number remains 210. Then, alpha decay reduces the mass number by 4 and the atomic number by 2, resulting in 206 and 83, respectively."]
+            modelAnswer: ["After β– decay, nucleon number remains 210. Then, alpha decay reduces the mass number by 4 and the atomic number by 2, resulting in a final mass number of 210 - 4 = 206 and a final atomic number of 84 + 1 - 2 = 83."]
           };
         }
       }
@@ -1334,20 +1350,20 @@
       const { topics: topicModes, wholeDefs, wholeEqs } = getCheckedTopicModes();
       const diff = getSelectedDifficulty();
       let filtered = [];
-      // Expand the question bank: if q.question is a function, build it; else use as is.
+      // Expand the question bank: if q.question is a function, use it; if it's a string, add it as text.
       const expandedBank = questionBank.map(q => {
         if (typeof q.question === "function") {
           const built = q.question();
           return { ...q, text: built.text, answer: built.answer, modelAnswer: built.modelAnswer, image: built.image || null };
         } else {
-          return { ...q, text: q.question };
+          return { ...q, text: q.question }; // For definitions
         }
       });
       
       for (let q of expandedBank) {
         let matchedTopicType = false;
         const isDefinition = (q.type === "definition");
-        const isEquation = (q.type === "equation" || q.type === "numeric" || q.type === "numeric_multi" || q.type === "numeric_dynamic");
+        const isEquation = (q.type === "equation" || q.type === "numeric" || q.type === "numeric_multi" || q.type==="numeric_dynamic");
         if (wholeDefs && isDefinition) matchedTopicType = true;
         if (wholeEqs && isEquation) matchedTopicType = true;
         
@@ -1425,7 +1441,7 @@
         inp.placeholder = "Enter your answer...";
         document.getElementById("answerInputs").appendChild(inp);
         currentAnswers = q.answer ? [q.answer] : q.keywords;
-      } else if (q.type === "equation" || q.type === "numeric" || q.type === "numeric_dynamic") {
+      } else if (q.type === "equation" || q.type === "numeric" || q.type==="numeric_dynamic") {
         const inp = document.createElement("input");
         inp.type = "text";
         inp.id = "answerInput";
