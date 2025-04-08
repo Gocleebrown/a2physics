@@ -220,13 +220,13 @@
         topic: 1, difficulty: "easy", type: "definition",
         question: "Define SI base quantity.",
         modelAnswer: "An SI base quantity is defined independently and is used as a foundation to derive other quantities.",
-        keywords: [["independent", "without reference"]]
+        keywords: [["independent", "without reference"], ["other quantities"]
       },
       {
         topic: 1, difficulty: "easy", type: "definition",
         question: "Define random error.",
         modelAnswer: "Random error is the unpredictable variation in measurements due to small, uncontrollable factors.",
-        keywords: [["unpredictable", "random"], ["variation", "fluctuation"], ["measurement", "reading"]]
+        keywords: [["unpredictable"], ["variation", "fluctuation", "movement"], ["measurement", "reading"]]
       },
       {
         topic: 1, difficulty: "easy", type: "definition",
@@ -238,25 +238,19 @@
         topic: 1, difficulty: "easy", type: "definition",
         question: "Define precision.",
         modelAnswer: "Precision refers to the closeness of repeated measurements to each other.",
-        keywords: [["consistency", "repeatability", "precision"], ["close", "near", "similar", "repeated measurements"]]
+        keywords: [["consistency", "repeatability", "precision"], ["close", "closeness", "near", "similar", "repeated measurements"]]
       },
       {
         topic: 1, difficulty: "easy", type: "definition",
         question: "Define accuracy.",
         modelAnswer: "Accuracy indicates how close a measurement is to the true or accepted value.",
-        keywords: [["accuracy", "accurate", "closeness"], ["true value", "actual value", "correct value"]]
+        keywords: [["closeness"], ["true value", "actual value", "correct value"]]
       },
       {
         topic: 1, difficulty: "easy", type: "definition",
         question: "Define absolute uncertainty.",
         modelAnswer: "Absolute uncertainty is the margin by which a measured value may deviate from the true value.",
-        keywords: [["uncertainty", "error"], ["margin", "amount"]]
-      },
-      {
-        topic: 1, difficulty: "easy", type: "definition",
-        question: "Define percentage uncertainty.",
-        modelAnswer: "Percentage uncertainty is the absolute uncertainty expressed as a percentage of the measured value.",
-        keywords: [["percentage", "percent"], ["uncertainty", "error"], ["absolute", "real error"]]
+        keywords: [["error"], ["margin", "amount"]]
       },
       {
         topic: 1, difficulty: "easy", type: "definition",
@@ -371,43 +365,43 @@
         topic: 2, difficulty: "easy", type: "definition",
         question: "Define displacement.",
         modelAnswer: "Displacement is the change in position of an object in a specific direction.",
-        keywords: [["displacement", "distance"], ["direction", "oriented", "straight line"], ["between two points", "start to end"]]
+        keywords: [["distance"], ["direction", "oriented", "straight line"], ["between two points", "start to end"]]
       },
       {
         topic: 2, difficulty: "easy", type: "definition",
         question: "Define speed.",
-        modelAnswer: "Speed is the distance traveled per unit time.",
-        keywords: [["distance"], ["time", "per second"]]
+        modelAnswer: "Speed is the distance traveled per unit time taken.",
+        keywords: [["distance"], ["divided by time taken", "per second", "per unit time"]]
       },
       {
         topic: 2, difficulty: "easy", type: "definition",
         question: "Define velocity.",
-        modelAnswer: "Velocity is displacement per unit time that includes direction.",
-        keywords: [["displacement"], ["time"], ["direction"]]
+        modelAnswer: "Velocity is displacement per unit time taken that (includes direction).",
+        keywords: [["displacement"], ["per unit time", "per second", "devided by time taken"]]
       },
       {
         topic: 2, difficulty: "easy", type: "definition",
         question: "Define acceleration.",
         modelAnswer: "Acceleration is the rate at which velocity changes over time.",
-        keywords: [["change", "rate"], ["velocity"], ["time"]]
+        keywords: [["change", "rate"], ["velocity"], ["per unit time", "per second", "devided by time taken" ]]
       },
       {
         topic: 2, difficulty: "easy", type: "definition",
         question: "State what the gradient of a displacement–time graph represents.",
         modelAnswer: "The gradient of a displacement–time graph represents the velocity.",
-        keywords: [["gradient"], ["velocity"]]
+        keywords: ["velocity"]
       },
       {
         topic: 2, difficulty: "easy", type: "definition",
         question: "State what the gradient of a velocity–time graph represents.",
         modelAnswer: "The gradient of a velocity–time graph represents the acceleration.",
-        keywords: [["gradient"], ["acceleration"]]
+        keywords: ["acceleration"]
       },
       {
         topic: 2, difficulty: "easy", type: "definition",
         question: "State what the area under a velocity–time graph represents.",
         modelAnswer: "The area under a velocity–time graph represents the displacement.",
-        keywords: [["area"], ["displacement"]]
+        keywords: ["displacement"]
       },
       
       // --- Topic 3: Dynamics ---
@@ -505,20 +499,20 @@
       {
         topic: 3, difficulty: "easy", type: "definition",
         question: "State Newton’s Second Law of Motion.",
-        modelAnswer: "Newton's Second Law states that the acceleration of an object is directly proportional to the net force acting on it and inversely proportional to its mass.",
-        keywords: [["acceleration"], ["net force"], ["mass"]]
+        modelAnswer: "Newton's Second Law states the force on an obeject is proportional to the rate of change of momentum",
+        keywords: ["rate of change of momentum", "change in momentum over time"]
       },
       {
         topic: 3, difficulty: "easy", type: "definition",
         question: "State Newton’s Third Law of Motion.",
         modelAnswer: "Newton's Third Law states that for every action there is an equal and opposite reaction.",
-        keywords: [["equal", "opposite"], ["action", "reaction"]]
+        keywords: [["equal"], ["opposite"]]
       },
       {
         topic: 3, difficulty: "easy", type: "definition",
         question: "Define inertia.",
         modelAnswer: "Inertia is the tendency of an object to resist any change in its state of motion.",
-        keywords: [["tendency", "inertia"], ["resist", "change", "motion"]]
+        keywords: [["resist"], ["change"], ["motion"]]
       },
       
       // --- Topic 4: Forces, density and pressure ---
@@ -568,13 +562,13 @@
         topic: 4, difficulty: "easy", type: "definition",
         question: "Define pressure.",
         modelAnswer: "Pressure is the force exerted per unit area.",
-        keywords: [["force"], ["area", "surface"]]
+        keywords: [["force"], ["per unit area", "divided by area", "per area", "divided by surface area"]]
       },
       {
         topic: 4, difficulty: "easy", type: "definition",
         question: "Define density.",
         modelAnswer: "Density is defined as the mass of a substance per unit volume.",
-        keywords: [["mass"], ["volume"]]
+        keywords: [["mass"], ["per unit volume", "divided by volume", "per volume"]]
       },
       {
         topic: 4, difficulty: "hard", type: "numeric_multi",
@@ -657,15 +651,9 @@
       },
       {
         topic: 5, difficulty: "easy", type: "definition",
-        question: "Define kinetic energy.",
-        modelAnswer: "Kinetic energy is the energy an object possesses due to its motion, calculated by ½ × mass × velocity².",
-        keywords: [["kinetic", "motion"], ["half", "½"], ["mass"], ["velocity", "speed", "squared"]]
-      },
-      {
-        topic: 5, difficulty: "easy", type: "definition",
         question: "Define power.",
         modelAnswer: "Power is the rate at which work is done or energy is transferred.",
-        keywords: [["rate"], ["work"]]
+        keywords: [["rate"], ["work", "energy transfer"]]
       },
       {
         topic: 5, difficulty: "easy", type: "definition",
@@ -771,7 +759,7 @@
         topic: 6, difficulty: "easy", type: "definition",
         question: "Define stress.",
         modelAnswer: "Stress is the force applied per unit cross-sectional area of a material.",
-        keywords: [["force"], ["cross-sectional area", "area"]]
+        keywords: [["force"],["per unit", "divided by"], ["cross-sectional area", "area"]]
       },
       {
         topic: 6, difficulty: "easy", type: "definition",
@@ -847,19 +835,19 @@
         topic: 7, difficulty: "easy", type: "definition",
         question: "Define wavelength.",
         modelAnswer: "Wavelength is the distance between successive points on a wave that are in phase.",
-        keywords: [["distance"], ["successive", "between successive"], ["in phase", "phase"]]
+        keywords: [["distance"], ["successive", "between successive"], ["in phase"]]
       },
       {
         topic: 7, difficulty: "easy", type: "definition",
         question: "Define frequency.",
         modelAnswer: "Frequency is the number of oscillations (or cycles) per second.",
-        keywords: [["oscillations", "cycles", "vibrations"], ["per second", "Hz"]]
+        keywords: [["oscillations", "cycles"], ["per second", "Hz"]]
       },
       {
         topic: 7, difficulty: "easy", type: "definition",
         question: "Define wavefront.",
         modelAnswer: "A wavefront is a line connecting points on a wave that are in the same phase.",
-        keywords: [["line"], ["equal phase", "same phase", "connecting"]]
+        keywords: [["line"], ["equal phase", "same phase"]]
       },
       {
         topic: 7, difficulty: "hard", type: "numeric_multi",
@@ -908,8 +896,8 @@
       {
         topic: 8, difficulty: "easy", type: "definition",
         question: "State the principle of superposition.",
-        modelAnswer: "The principle of superposition states that when waves overlap, the resultant displacement is the sum of the individual displacements.",
-        keywords: [["sum", "total"], ["displacement", "overlap"]]
+        modelAnswer: "The principle of superposition states that when two or more waves overlap, the resultant displacement/amplitude is the sum of the individual displacements.",
+        keywords: [["waves overlap", "waves in same place"], ["sum", "amplitudes added together"], ["resultant amplitude"]]
       },
       {
         topic: 8, difficulty: "easy", type: "definition",
@@ -923,7 +911,12 @@
         modelAnswer: "Destructive interference occurs when waves are out of phase, causing them to cancel each other out.",
         keywords: [["out of phase"], ["cancel", "reduce"]]
       },
-      
+        {
+        topic: 8, difficulty: "easy", type: "definition",
+        question: "Define diffraction.",
+        modelAnswer: "Diffraction is the spreading out of waves when they pass through a gap or around an obstacle",
+        keywords: [["spreading"],["pass", "around"], ["gap", "obstacle"]]
+      },
       // --- Topic 9: Electricity ---
       {
         topic: 9, difficulty: "easy", type: "equation",
@@ -970,7 +963,7 @@
         topic: 9, difficulty: "easy", type: "definition",
         question: "Define electric current.",
         modelAnswer: "Electric current is the rate of flow of electric charge through a conductor.",
-        keywords: [["rate", "flow"], ["charge"]]
+        keywords: ["rate of flow of charge", "charge past a point per unit time", "charge past a point per second"]
       },
       {
         topic: 9, difficulty: "easy", type: "definition",
@@ -1066,7 +1059,7 @@
         topic: 10, difficulty: "easy", type: "definition",
         question: "Define internal resistance.",
         modelAnswer: "Internal resistance is the resistance inside a power source that causes a drop in the terminal voltage.",
-        keywords: [["internal"], ["power source"], ["resistance"]]
+        keywords: [["resistance inside"], ["power source"], ["terminal voltage"]]
       },
       {
         topic: 10, difficulty: "hard", type: "numeric_multi",
@@ -1145,13 +1138,13 @@
         topic: 11, difficulty: "easy", type: "definition",
         question: "Define proton number.",
         modelAnswer: "Proton number is the count of protons in a nucleus.",
-        keywords: [["proton", "number"]]
+        keywords: ["protons in a nucleus"]
       },
       {
         topic: 11, difficulty: "easy", type: "definition",
         question: "Define isotope.",
         modelAnswer: "Isotopes are atoms of the same element with the same number of protons but different numbers of neutrons.",
-        keywords: [["same element"], ["protons"], ["different neutrons"]]
+        keywords: [["same number of", "same amount of protons"], ["different neutrons"]]
       },
       {
         topic: 11, difficulty: "easy", type: "definition",
@@ -1223,7 +1216,7 @@
         topic: 11, difficulty: "easy", type: "definition",
         question: "Define the unified atomic mass unit (u).",
         modelAnswer: "One unified atomic mass unit (u) is defined as 1/12 the mass of a carbon-12 atom.",
-        keywords: [["1/12"], ["carbon-12"]]
+        keywords: [["1/12"], ["carbon-12"], ["mass"]]
       },
       {
         topic: 11, difficulty: "hard", type: "numeric_multi",
