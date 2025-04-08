@@ -305,7 +305,7 @@
             text: `A ${m} kg block slides down a ${angle}° frictionless slope for ${d} m. Find its speed at the bottom.`,
             answer: v.toFixed(2),
             modelAnswer: `First, calculate acceleration along the slope: a = g×sin(${angle}°) ≈ ${a.toFixed(2)} m/s². Then, use v = √(2ad) to get v ≈ ${v.toFixed(2)} m/s.`,
-            image: createSlopeSVG(20, 23, 5)
+            
           };
         }
       },
@@ -324,7 +324,6 @@
               `Step 2: Determine final speed using v = √(2ad) = √(2×${a.toFixed(2)}×${distance}) ≈ ${v.toFixed(2)} m/s.`,
               `Step 3: Compute kinetic energy using KE = 0.5×mass×v² = 0.5×${mass}×(${v.toFixed(2)})² ≈ ${ke.toFixed(2)} J.`
             ],
-            image: createSlopeSVG(mass, angle, distance)
           };
         }
       },
